@@ -163,12 +163,25 @@
 			dir = olddir
 			set_dir(direct)
 
+		//Do buckled mob logic
+		if(buckled_mob)
+			handle_buckled_mob_movement(loc, direct)
+
 		src.move_speed = world.time - src.l_move_time
 		src.l_move_time = world.time
 		src.m_flag = 1
 		if ((A != src.loc && A && A.z == src.z))
 			src.last_move = get_dir(A, src.loc)
 	return
+
+
+/atom/movable/proc/handle_buckled_mob_movement(newloc,direct)
+	if(!buckled_mob.forceMove(newloc, direct))
+		loc = buckled_mob.loc
+		last_move = buckled_mob.last_move
+		buckled_mob.inertia_dir = last_move
+		return 0
+	return 1
 
 /client/proc/Move_object(direct)
 	if(mob && mob.control_object)

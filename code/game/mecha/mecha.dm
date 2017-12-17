@@ -52,6 +52,14 @@
 	var/lights_power = 6
 	var/force = 0
 
+	//Mech riding variables
+	var/list/can_ride_typecache = list()
+	var/datum/riding/riding_datum    //Datum controlling riding behaviour
+	var/ride_allow_incapacitated = FALSE
+	var/allow_riding = TRUE
+	can_buckle = 1
+	buckle_lying = 0
+
 	//inner atmos
 	var/use_internal_tank = 0
 	var/internal_tank_valve = ONE_ATMOSPHERE
@@ -110,6 +118,9 @@
 	return
 
 /obj/mecha/Destroy()
+	//eject hitchickers
+	if(buckled_mob != null)
+		riding_datum.force_dismount()
 	src.go_out()
 	for(var/mob/M in src) //Let's just be ultra sure
 		M.Move(loc)
@@ -253,6 +264,16 @@
 ////////////////////////////
 ///// Action processing ////
 ////////////////////////////
+/obj/mecha/MouseDrop_T(mob/M as mob, mob/user as mob)
+	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
+		return
+	if(user != M)
+		return
+	src.log_message("[user] tries to move in.")
+	if(src.occupant)
+		buckle_mob(M)
+		return
+
 /*
 /atom/DblClick(object,location,control,params)
 	var/mob/M = src.mob
@@ -350,7 +371,8 @@
 /obj/mecha/relaymove(mob/user,direction)
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
-		to_chat(user, "You climb out from [src]")
+		if(user != buckled_mob) //People dropping from mecha shouldn't get this message
+			to_chat(user, "You climb out from [src]")
 		return 0
 	if(connected_port)
 		if(world.time - last_message > 20)
@@ -390,6 +412,8 @@
 
 /obj/mecha/proc/mechturn(direction)
 	set_dir(direction)
+	if(buckled_mob != null)
+		riding_datum.handle_vehicle_offsets()
 	playsound(src,'sound/mecha/mechturn.ogg',40,1)
 	return 1
 
@@ -1157,6 +1181,7 @@
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
 		src.set_dir(dir_in)
+		riding_datum.handle_vehicle_offsets()
 	return
 
 /////////////////////////
@@ -1855,3 +1880,45 @@
 */
 /obj/mecha/fall_damage()
 	return 550
+
+
+//Riding procs
+obj/mecha/buckle_mob(mob/living/M, force = FALSE, check_loc = FALSE)
+	if(!ishuman(M))
+		to_chat(M, "<span class='notice'>You can't hold onto the handle!</span>")
+		return
+	if(!riding_datum)
+		riding_datum = new /datum/riding/mecha(src)
+	if(buckled_mob)
+		return
+	if(M.stat)
+		return
+	if(M.incapacitated())
+		return
+	if(M.restrained())
+		return
+	if(iscarbon(M) && M.r_hand != null && M.l_hand != null)
+		to_chat(M, "<span class='notice'>You need a free hand to hold onto the mech!</span>")
+		return
+	to_chat(M, "<span class='notice'>You grab hold of the handle on the back of [src]...</span>")
+	M.on_ride=1
+	if(do_after(M, 15, src) && riding_datum.equip_buckle_inhands(M) && M in range(1))
+		if(iscarbon(M))
+			if(M.incapacitated(FALSE, TRUE) || buckled_mob)
+				to_chat(M, "<span class='warning'>You lose your grip and fall off of [src]!</span>")
+				M.on_ride=0
+				return
+		visible_message("<span class='notice'>[M] pulls \himself up onto the back of [src]. </span>")
+		M.buckled = src
+		buckled_mob = M
+		M.update_canmove()
+		M.stop_pulling()
+		M.forceMove(src.loc)
+		riding_datum.handle_vehicle_offsets()
+	else
+		visible_message("<span class='warning'>[M] loses their grip on [src]!</span>")
+		M.on_ride=0
+
+/obj/mecha/unbuckle_mob(mob/user)
+	riding_datum.restore_position(user)
+	..()

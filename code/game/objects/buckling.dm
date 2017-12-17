@@ -1,4 +1,4 @@
-/obj
+/atom/movable
 	var/can_buckle = 0
 	var/buckle_movable = 0
 	var/buckle_dir = 0
@@ -7,22 +7,22 @@
 	var/buckle_require_restraints = 0 //require people to be handcuffed before being able to buckle. eg: pipes
 	var/mob/living/buckled_mob = null
 
-/obj/attack_hand(mob/living/user)
+/atom/movable/attack_hand(mob/living/user)
 	. = ..()
 	if(can_buckle && buckled_mob)
 		user_unbuckle_mob(user)
 
-/obj/MouseDrop_T(mob/living/M, mob/living/user)
+/atom/movable/MouseDrop_T(mob/living/M, mob/living/user)
 	. = ..()
 	if(can_buckle && istype(M))
 		user_buckle_mob(M, user)
 
-/obj/Destroy()
+/atom/movable/Destroy()
 	unbuckle_mob()
 	return ..()
 
 
-/obj/proc/buckle_mob(mob/living/M)
+/atom/movable/proc/buckle_mob(mob/living/M)
 	if(buckled_mob) //unless buckled_mob becomes a list this can cause problems
 		return 0
 	if(!istype(M) || (M.loc != loc) || M.buckled || M.pinned.len || (buckle_require_restraints && !M.restrained()))
@@ -38,8 +38,15 @@
 	post_buckle_mob(M)
 	return 1
 
-/obj/proc/unbuckle_mob()
+/atom/movable/proc/unbuckle_mob()
 	if(buckled_mob && buckled_mob.buckled == src)
+		if(buckled_mob.on_ride) //Riding mobs need to get their hands freed once again
+			for(var/obj/item/riding_offhand/O in buckled_mob.contents)
+				qdel(O)
+			buckled_mob.on_ride=0
+			buckled_mob.pixel_x = 0
+			buckled_mob.pixel_y = 0 //just to ensure that the player goes back to where they should be.
+
 		. = buckled_mob
 		buckled_mob.buckled = null
 		buckled_mob.anchored = initial(buckled_mob.anchored)
@@ -49,7 +56,7 @@
 
 		post_buckle_mob(.)
 
-/obj/proc/post_buckle_mob(mob/living/M)
+/atom/movable/proc/post_buckle_mob(mob/living/M)
 	if(buckle_pixel_shift)
 		if(M == buckled_mob)
 			var/list/pixel_shift = cached_key_number_decode(buckle_pixel_shift)
@@ -57,7 +64,7 @@
 		else
 			animate(M, pixel_x = M.default_pixel_x, pixel_y = M.default_pixel_y, 4, 1, LINEAR_EASING)
 
-/obj/proc/user_buckle_mob(mob/living/M, mob/user)
+/atom/movable/proc/user_buckle_mob(mob/living/M, mob/user)
 	if(!ticker) //why do we need to check this?
 		to_chat(user, "<span class='warning'>You can't buckle anyone in before the game starts.</span>")
 		return 0
@@ -89,7 +96,7 @@
 				"<span class='danger'>You are buckled to [src] by [user.name]!</span>",\
 				"<span class='notice'>You hear metal clanking.</span>")
 
-/obj/proc/user_unbuckle_mob(mob/user)
+/atom/movable/proc/user_unbuckle_mob(mob/user)
 	var/mob/living/M = unbuckle_mob()
 	if(M)
 		if(M != user)
