@@ -203,3 +203,14 @@
 	name = "heavy shock beam"
 	damage = 20
 	agony  = 10
+
+//For the defensive fire event
+/obj/item/projectile/beam/pulse/artillery
+	name = "pulse artillery"
+	icon_state = "bogb"
+	fire_sound='sound/weapons/blaster.ogg'
+	damage = 200
+
+	muzzle_type = /obj/effect/projectile/xray/muzzle
+	tracer_type = /obj/effect/projectile/xray/tracer
+	impact_type = /obj/effect/projectile/xray/impact
