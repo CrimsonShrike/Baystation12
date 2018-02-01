@@ -92,8 +92,6 @@
 			if (some_hearer.ear_deaf > 0)
 				continue
 			var/dist = get_dist(some_hearer, src.actual_instrument)
-			if (!some_hearer.is_preference_enabled(/datum/client_preference/hear_instruments) && dist > forced_sound_in)
-				continue
 			src.present_listeners += some_hearer
 			src.last_updated_listeners = world.time
 	return src.present_listeners
