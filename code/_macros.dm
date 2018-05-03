@@ -168,3 +168,8 @@
 #define cast_new(type, num, args...) if((num) == 1) { new type(args) } else { for(var/i=0;i<(num),i++) { new type(args) } }
 
 #define FLAGS_EQUALS(flag, flags) ((flag & (flags)) == (flags))
+
+//Helpers for messages
+#define SPAN_NOTICE(text)  "<span class='notice'>[text]</span>"
+#define SPAN_WARNING(text) "<span class='warning'>[text]</span>"
+#define SPAN_DANGER(text)  "<span class='danger'>[text]</span>"

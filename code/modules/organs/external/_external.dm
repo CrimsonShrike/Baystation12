@@ -82,6 +82,9 @@
 	// HUD element variable, see organ_icon.dm get_damage_hud_image()
 	var/image/hud_damage_image
 
+	//Organ modules
+	var/obj/item/organ_module/module = null
+
 /obj/item/organ/external/New(var/mob/living/carbon/holder)
 	..()
 	if(isnull(pain_disability_threshold))
@@ -122,6 +125,9 @@
 			owner.organs -= null
 
 	if(autopsy_data)    autopsy_data.Cut()
+
+	if(module)
+		QDEL_NULL(module)
 
 	return ..()
 
@@ -235,6 +241,7 @@
 	for(var/obj/item/organ/external/child in children)
 		all_items.Add(child.get_contents_recursive())
 
+	all_items.Add(module)
 	return all_items
 
 /obj/item/organ/external/proc/is_dislocated()
@@ -1157,6 +1164,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			qdel(spark_system)
 		qdel(src)
 
+	if(module)
+		module.organ_removed(src, owner)
+
 /obj/item/organ/external/proc/disfigure(var/type = "brute")
 	if (disfigured)
 		return
@@ -1410,3 +1420,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/proc/has_genitals()
 	return !isrobotic() && species && species.sexybits_location == organ_tag
+
+
+
+/obj/item/organ/external/proc/activate_module()
+	set name = "Activate module"
+	set category = "Organs"
+	set src in usr
+
+	var/obj/item/organ_module/active/OMA = module
+	if(OMA)
+		OMA.activate(owner, src)

@@ -62,6 +62,12 @@
 			else if(E.status & ORGAN_BROKEN)
 				tally += 1.5
 
+			//This may need a more generic way, maybe move to organ level
+			if(E && E.module)
+				var/obj/item/organ_module/muscle/M = E.module
+				if(M && istype(M))
+					tally -= M.tally
+
 	if(shock_stage >= 10) tally += 3
 
 	if(is_asystole()) tally += 10  //heart attacks are kinda distracting
