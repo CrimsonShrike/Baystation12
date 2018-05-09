@@ -2,7 +2,7 @@
 	icon_state = "armblade"
 	item_state = null
 	name = "armblade"
-	icon = 'icons/obj/surgery.dmi'
+	icon = 'icons/obj/augment.dmi'
 	icon_state = "armblade"
 	applies_material_colour = 0
 

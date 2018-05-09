@@ -101,9 +101,8 @@
 				to_chat(user, "<span class='warning'>The grenade can not hold more containers.</span>")
 				return
 			else
-				if(W.reagents.total_volume)
+				if(W.reagents.total_volume && user.unEquipActive())
 					to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
-					user.drop_item()
 					W.loc = src
 					beakers += W
 					stage = 1

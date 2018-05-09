@@ -390,9 +390,8 @@
 				if (failure_probability && prob(failure_probability))
 					total_system_failure(failure_probability, user)
 					return
-
+				if(!user.unEquipActive()) return
 				to_chat(usr, "You install the coil into the SMES unit!")
-				user.drop_item()
 				component_parts += W
 				W.forceMove(src)
 				recalc_coils()

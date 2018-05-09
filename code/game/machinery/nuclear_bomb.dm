@@ -74,8 +74,7 @@ var/bomb_set
 		return attack_hand(user)
 
 	if(src.extended)
-		if(istype(O, /obj/item/weapon/disk/nuclear))
-			usr.drop_item()
+		if(istype(O, /obj/item/weapon/disk/nuclear) && usr.unEquipActive())
 			O.forceMove(src)
 			src.auth = O
 			src.add_fingerprint(user)
@@ -234,8 +233,7 @@ var/bomb_set
 			auth = null
 		else
 			var/obj/item/I = usr.get_active_hand()
-			if(istype(I, /obj/item/weapon/disk/nuclear))
-				usr.drop_item()
+			if(istype(I, /obj/item/weapon/disk/nuclear) && usr.unEquipActive())
 				I.forceMove(src)
 				auth = I
 	if(is_auth(usr))

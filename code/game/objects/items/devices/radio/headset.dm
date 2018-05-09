@@ -278,13 +278,11 @@
 			to_chat(user, "The headset can't hold another key!")
 			return
 
-		if(!keyslot1)
-			user.drop_item()
+		if(!keyslot1 && user.unEquipActive())
 			W.loc = src
 			keyslot1 = W
 
-		else
-			user.drop_item()
+		else if (user.unEquipActive())
 			W.loc = src
 			keyslot2 = W
 

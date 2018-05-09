@@ -51,11 +51,10 @@
 			if(2)
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == "machine")
+					if(B.board_type == "machine" && user.unEquipActive())
 						playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You add the circuit board to the frame.</span>")
 						circuit = P
-						user.drop_item()
 						P.loc = src
 						icon_state = "box_2"
 						state = 3

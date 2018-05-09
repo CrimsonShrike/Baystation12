@@ -17,13 +17,13 @@
 		if(sample)
 			to_chat(user, "\The [src] is already loaded.")
 			return
+		if(user.unEquipActive())
+			sample = O
+			user.drop_item()
+			O.loc = src
 
-		sample = O
-		user.drop_item()
-		O.loc = src
-
-		user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")
-		GLOB.nanomanager.update_uis(src)
+			user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")
+			GLOB.nanomanager.update_uis(src)
 
 	src.attack_hand(user)
 

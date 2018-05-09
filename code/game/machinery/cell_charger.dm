@@ -52,8 +52,8 @@
 			if(a.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>The [name] blinks red as you try to insert the cell!</span>")
 				return
-
-			user.drop_item()
+			if(!user.unEquipActive()) //Cell is stuck you your hand somehow
+				return
 			W.loc = src
 			charging = W
 			user.visible_message("[user] inserts a cell into the charger.", "You insert a cell into the charger.")

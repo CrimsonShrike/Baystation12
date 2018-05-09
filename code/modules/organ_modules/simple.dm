@@ -1,51 +1,75 @@
 //Simple toggleabse module. Just put holding in hands or get it back
-/obj/item/organ_module/active/simple
+/obj/item/organ/augment/active/simple
 	var/obj/item/holding = null
 	var/holding_type = null
 
-/obj/item/organ_module/active/simple/New()
+/obj/item/organ/augment/active/simple/New()
 	..()
 	if(holding_type)
 		holding = new holding_type(src)
 		holding.canremove = 0
 
-/obj/item/organ_module/active/simple/proc/deploy(mob/living/carbon/human/H, obj/item/organ/external/E)
+
+/obj/item/organ/augment/active/simple/proc/holding_dropped()
+
+	//Stop caring
+	GLOB.item_unequipped_event.unregister(holding, src)
+
+	if(holding.loc != src) //something went wrong and is no longer attached/ it broke
+		holding.canremove = 1
+		holding = null     //We no longer hold this, you will have to get a replacement module or fix it somehow
+
+
+
+
+
+/obj/item/organ/augment/active/simple/proc/deploy()
+
 	var/slot = null
-	if(E.organ_tag in list(BP_L_ARM, BP_L_HAND))
+	if(limb.organ_tag in list(BP_L_ARM, BP_L_HAND))
 		slot = slot_l_hand
-	else if(E.organ_tag in list(BP_R_ARM, BP_R_HAND))
+	else if(limb.organ_tag in list(BP_R_ARM, BP_R_HAND))
 		slot = slot_r_hand
-	if(H.equip_to_slot_if_possible(holding, slot))
-		H.visible_message(
-			SPAN_WARNING("[H] extend \his [holding.name] from [E]."),
+	if(owner.equip_to_slot_if_possible(holding, slot))
+		GLOB.item_unequipped_event.register(holding, src, /obj/item/organ_module/active/simple/proc/holding_dropped )
+		owner.visible_message(
+			SPAN_WARNING("[owner] extends \his [holding.name] from [E]."),
 			SPAN_NOTICE("You extend your [holding.name] from [E].")
 		)
 
-/obj/item/organ_module/active/simple/proc/retract(mob/living/carbon/human/H, obj/item/organ/external/E)
+/obj/organ/augment/active/simple/proc/retract()
 	if(holding.loc == src)
 		return
 
-	if(ismob(holding.loc))
+	if(ismob(holding.loc) && holding.loc == H)
 		var/mob/M = holding.loc
-		M.drop_from_inventory(holding)
+		M.drop_from_inventory(holding, src)
 		M.visible_message(
 			SPAN_WARNING("[M] retracts \his [holding.name] into [E]."),
 			SPAN_NOTICE("You retract your [holding.name] into [E].")
 		)
-	holding.forceMove(src)
 
 
-/obj/item/organ_module/active/simple/activate(mob/living/carbon/human/H, obj/item/organ/external/E)
-	if(!can_activate(H, E))
+
+/obj/item/organ_module/active/simple/activate()
+	if(!can_activate())
 		return
 
 	if(holding.loc == src) //item not in hands
-		deploy(H, E)
+		deploy()
 	else //retract item
-		retract(H, E)
+		retract()
 
 /obj/item/organ_module/active/simple/deactivate(mob/living/carbon/human/H, obj/item/organ/external/E)
 	retract(H, E)
 
-/obj/item/organ_module/active/simple/organ_removed(var/obj/item/organ/external/E, var/mob/living/carbon/human/H)
-	retract(H, E)
+
+
+
+/obj/item/organ_module/active/simple/can_activate()
+	if(..())
+		if(!holding)
+			owner.visible_message(owner, SPAN_WARNING("The device is damaged and fails to deploy"))
+			return FALSE
+		return TRUE
+	return FALSE

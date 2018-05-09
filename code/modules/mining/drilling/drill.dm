@@ -161,8 +161,7 @@
 	if(istype(O, /obj/item/weapon/cell))
 		if(cell)
 			to_chat(user, "The drill already has a cell installed.")
-		else
-			user.drop_item()
+		else if(user.unEquipActive())
 			O.loc = src
 			cell = O
 			component_parts += O

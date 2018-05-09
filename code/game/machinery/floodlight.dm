@@ -131,7 +131,8 @@
 			if(cell)
 				to_chat(user, "There is a power cell already installed.")
 			else
-				user.drop_item()
+				if(!user.unEquipActive())
+					return
 				W.loc = src
 				cell = W
 				to_chat(user, "You insert the power cell.")

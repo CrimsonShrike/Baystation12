@@ -130,7 +130,8 @@
 	if(!I)
 		return
 
-	user.drop_item()
+	if(!user.unEquipActive()) return
+
 	if(I)
 		I.forceMove(src)
 

@@ -154,8 +154,7 @@
 			return
 
 	if(istype(W, /obj/item/weapon/cell))
-		if(!cell)
-			user.drop_item()
+		if(!cell && user.unEquipActive())
 			cell = W
 			cell.loc = src
 			to_chat(user, "<span class='notice'>You jam [cell] into [src] and wire it to the firing coil.</span>")

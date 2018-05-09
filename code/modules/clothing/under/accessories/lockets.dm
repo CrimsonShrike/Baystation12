@@ -37,9 +37,8 @@
 	if(istype(O,/obj/item/weapon/paper) || istype(O, /obj/item/weapon/photo))
 		if(held)
 			to_chat(usr, "\The [src] already has something inside it.")
-		else
+		else if(user.unEquipActive())
 			to_chat(usr, "You slip [O] into [src].")
-			user.drop_item()
 			O.loc = src
 			src.held = O
 		return

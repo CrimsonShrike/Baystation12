@@ -198,8 +198,7 @@
 		wrench_floor_bolts(user)
 		power_change()
 		return
-	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
-		user.drop_item()
+	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0 && user.unEquipActive())
 		W.forceMove(src)
 		coin = W
 		categories |= CAT_COIN

@@ -52,8 +52,8 @@
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
 			return
+		if(!user.unEquipActive()) return
 		src.beaker = B
-		user.drop_item()
 		B.loc = src
 		to_chat(user, "You add the beaker to the machine!")
 		src.updateUsrDialog()
@@ -64,9 +64,8 @@
 		if(src.loaded_pill_bottle)
 			to_chat(user, "A pill bottle is already loaded into the machine.")
 			return
-
+		if(!user.unEquipActive()) return
 		src.loaded_pill_bottle = B
-		user.drop_item()
 		B.loc = src
 		to_chat(user, "You add the pill bottle into the dispenser slot!")
 		src.updateUsrDialog()
@@ -336,9 +335,8 @@
 
 		if (beaker)
 			return 1
-		else
+		else if (user.unEquipActive())
 			src.beaker =  O
-			user.drop_item()
 			O.loc = src
 			update_icon()
 			src.updateUsrDialog()

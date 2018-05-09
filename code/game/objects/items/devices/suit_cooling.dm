@@ -129,8 +129,7 @@
 		if(cover_open)
 			if(cell)
 				to_chat(user, "There is a [cell] already installed here.")
-			else
-				user.drop_item()
+			else if (user.unEquipActive())
 				W.forceMove(src)
 				cell = W
 				to_chat(user, "You insert the [cell].")

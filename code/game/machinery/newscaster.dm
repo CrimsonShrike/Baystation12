@@ -746,7 +746,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	if(istype(user.get_active_hand(), /obj/item/weapon/photo))
 		var/obj/item/photo = user.get_active_hand()
-		user.drop_item()
+		if(!user.unEquipActive()) //Something may prevent you from dropping picture
+			return
 		photo.loc = src
 		photo_data = new(photo, 0)
 	else if(istype(user,/mob/living/silicon))

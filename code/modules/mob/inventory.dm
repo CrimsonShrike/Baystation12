@@ -228,6 +228,13 @@ var/list/slot_equipment_priority = list( \
 	drop_from_inventory(I, target)
 	return 1
 
+
+//Unequip active hand if possible
+/mob/proc/unEquipActive(var/atom/Target)
+	if(hand)	return unEquip(l_hand, Target)
+	else		return unEquip(r_hand, Target)
+
+
 //Attemps to remove an object on a mob.
 /mob/proc/remove_from_mob(var/obj/O, var/atom/target)
 	if(!O) // Nothing to remove, so we succeed.

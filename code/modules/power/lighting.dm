@@ -330,8 +330,8 @@
 			to_chat(user, "This type of light requires a [get_fitting_name()].")
 			return
 
+		if(!user.unEquipActive()) return
 		to_chat(user, "You insert [W].")
-		user.drop_item()
 		insert_bulb(W)
 		src.add_fingerprint(user)
 

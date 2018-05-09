@@ -62,8 +62,7 @@
 			else
 				// insert cell
 				var/obj/item/weapon/cell/C = usr.get_active_hand()
-				if(istype(C))
-					user.drop_item()
+				if(istype(C) && user.unEquipActive())
 					cell = C
 					C.forceMove(src)
 					C.add_fingerprint(usr)
@@ -145,8 +144,7 @@
 		if("cellinstall")
 			if(panel_open && !cell)
 				var/obj/item/weapon/cell/C = usr.get_active_hand()
-				if(istype(C))
-					usr.drop_item()
+				if(istype(C) && usr.unEquipActive())
 					cell = C
 					C.forceMove(src)
 					C.add_fingerprint(usr)

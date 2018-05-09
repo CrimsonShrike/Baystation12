@@ -184,8 +184,8 @@ var/global/photo_count = 0
 		if(pictures_left)
 			to_chat(user, "<span class='notice'>[src] still has some film in it!</span>")
 			return
+		if(!user.unEquipActive()) return
 		to_chat(user, "<span class='notice'>You insert [I] into [src].</span>")
-		user.drop_item()
 		qdel(I)
 		pictures_left = pictures_max
 		return

@@ -86,8 +86,7 @@
 		. = TOPIC_REFRESH
 	else if(href_list["insertcard"])
 		var/obj/item/I = user.get_active_hand()
-		if (istype(I, /obj/item/weapon/card))
-			user.drop_item()
+		if (istype(I, /obj/item/weapon/card) && user.unEquipActive())
 			I.forceMove(src)
 			auth_card = I
 			if(attempt_unlock(I, user))
@@ -148,8 +147,7 @@
 		if(panel_open)
 			if(cell)
 				to_chat(user, "<span class='warning'>There is a power cell already installed.</span>")
-			else
-				user.drop_item()
+			else if(user.unEquipActive())
 				W.forceMove(src)
 				cell = W
 				to_chat(user, "<span class='info'>You insert the power cell.</span>")

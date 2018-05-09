@@ -332,7 +332,7 @@
 				usr:toggle_throw_mode()
 		if("drop")
 			if(usr.client)
-				usr.client.drop_item()
+				usr.unEquipActive()
 
 		if("module")
 			if(isrobot(usr))

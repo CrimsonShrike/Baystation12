@@ -103,7 +103,7 @@
 			to_chat(user, "<span class='notice'>There is already a beaker loaded.</span>")
 			return
 
-		user.drop_item()
+		if(!user.unEquipActive()) return
 		O.loc = src
 		reagent_glass = O
 		to_chat(user, "<span class='notice'>You insert [O].</span>")
@@ -297,8 +297,7 @@
 	else
 		switch(build_step)
 			if(0)
-				if(istype(W, /obj/item/device/healthanalyzer))
-					user.drop_item()
+				if(istype(W, /obj/item/device/healthanalyzer) && user.unEquipActive())
 					qdel(W)
 					build_step++
 					to_chat(user, "<span class='notice'>You add the health sensor to [src].</span>")
@@ -306,8 +305,7 @@
 					overlays += image('icons/mob/bot/medibot.dmi', "na_scanner")
 
 			if(1)
-				if(isprox(W))
-					user.drop_item()
+				if(isprox(W) && user.unEquipActive())
 					qdel(W)
 					to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
 					var/turf/T = get_turf(src)

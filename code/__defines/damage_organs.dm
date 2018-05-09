@@ -74,3 +74,7 @@
 #define BLOOD_VOLUME_OKAY    75
 #define BLOOD_VOLUME_BAD     60
 #define BLOOD_VOLUME_SURVIVE 40
+
+//For augmentation, external organs can take parts?
+#define AUGMENTATION_MECHANIC   (1<<0)
+#define AUGMENTATION_ORGANIC   (1<<1)

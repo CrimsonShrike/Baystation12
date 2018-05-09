@@ -22,9 +22,9 @@
 			to_chat(user, "\The [src] is already loaded.")
 			return
 
-		dish = I
-		c.drop_item()
-		I.loc = src
+		if(c.unEquipActive())
+			dish = I
+			I.loc = src
 
 	if(istype(I,/obj/item/weapon/diseasedisk))
 		to_chat(user, "You upload the contents of the disk onto the buffer.")

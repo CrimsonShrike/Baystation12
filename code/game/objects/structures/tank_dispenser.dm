@@ -49,8 +49,7 @@
 
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
-		if(oxygentanks < 10)
-			user.drop_item()
+		if(oxygentanks < 10 && user.unEquipActive())
 			I.loc = src
 			oxytanks.Add(I)
 			oxygentanks++
@@ -62,8 +61,7 @@
 		updateUsrDialog()
 		return
 	if(istype(I, /obj/item/weapon/tank/phoron))
-		if(phorontanks < 10)
-			user.drop_item()
+		if(phorontanks < 10 && user.unEquipActive())
 			I.loc = src
 			platanks.Add(I)
 			phorontanks++

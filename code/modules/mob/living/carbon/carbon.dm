@@ -276,7 +276,6 @@
 	var/atom/movable/item = src.get_active_hand()
 
 	if(!item) return
-
 	var/throw_range = item.throw_range
 	var/itemsize
 	if (istype(item, /obj/item/grab))
@@ -299,7 +298,7 @@
 		var/obj/item/I = item
 		itemsize = I.w_class
 
-	src.drop_from_inventory(item)
+	if(!src.unEquip(item)) return //If it's stuck to your hand, tough luck
 	if(!item || !isturf(item.loc))
 		return
 

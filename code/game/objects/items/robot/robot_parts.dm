@@ -149,8 +149,7 @@
 	if (istype(W, /obj/item/robot_parts))
 		var/obj/item/robot_parts/part = W
 		if(src.parts[part.bp_tag])	return
-		if(part.can_install(user))
-			user.drop_item()
+		if(part.can_install(user) && user.unEquipActive())
 			part.loc = src
 			src.parts[part.bp_tag] = part
 			src.update_icon()
@@ -190,9 +189,8 @@
 				return
 
 			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc), unfinished = 1)
-			if(!O)	return
+			if(!O || !user.unEquipActive())	return
 
-			user.drop_item()
 
 			O.mmi = W
 			O.set_invisibility(0)
@@ -242,8 +240,7 @@
 		if(src.cell)
 			to_chat(user, "<span class='warning'>You have already inserted a cell!</span>")
 			return
-		else
-			user.drop_item()
+		else if (user.unEquipActive())
 			W.loc = src
 			src.cell = W
 			to_chat(user, "<span class='notice'>You insert the cell!</span>")
@@ -329,10 +326,9 @@
 				add_flashes(W,user)
 		else
 			add_flashes(W,user)
-	else if(istype(W, /obj/item/weapon/stock_parts/manipulator))
+	else if(istype(W, /obj/item/weapon/stock_parts/manipulator) && user.unEquipActive())
 		to_chat(user, "<span class='notice'>You install some manipulators and modify the head, creating a functional spider-bot!</span>")
 		new /mob/living/simple_animal/spiderbot(get_turf(loc))
-		user.drop_item()
 		qdel(W)
 		qdel(src)
 		return
@@ -342,13 +338,11 @@
 	if(src.flash1 && src.flash2)
 		to_chat(user, "<span class='notice'>You have already inserted the eyes!</span>")
 		return
-	else if(src.flash1)
-		user.drop_item()
+	else if(src.flash1 && user.unEquipActive())
 		W.loc = src
 		src.flash2 = W
 		to_chat(user, "<span class='notice'>You insert the flash into the eye socket!</span>")
-	else
-		user.drop_item()
+	else if(user.unEquipActive())
 		W.loc = src
 		src.flash1 = W
 		to_chat(user, "<span class='notice'>You insert the flash into the eye socket!</span>")

@@ -56,6 +56,8 @@
 			to_chat(user, "<span class='notice'>This brain is completely useless to you.</span>")
 			return
 
+		if(!user.unEquipActive()) return
+
 		user.visible_message("<span class='notice'>\The [user] sticks \a [O] into \the [src].</span>")
 
 		brainmob = B.brainmob
@@ -65,7 +67,6 @@
 		brainmob.set_stat(CONSCIOUS)
 		brainmob.switch_from_dead_to_living_mob_list() //Update dem lists
 
-		user.drop_item()
 		brainobj = O
 		brainobj.forceMove(src)
 

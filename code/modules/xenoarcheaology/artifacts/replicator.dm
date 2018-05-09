@@ -125,7 +125,7 @@
 	user << browse(dat, "window=alien_replicator")
 
 /obj/machinery/replicator/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	user.drop_item()
+	if(!user.unEquipActive()) return
 	W.forceMove(src)
 	stored_materials.Add(W)
 	src.visible_message("<span class='notice'>\The [user] inserts \the [W] into \the [src].</span>")

@@ -154,8 +154,7 @@
 	if(istype(W, /obj/item/weapon/tank) && (stat & MAINT))
 		if(tank)
 			to_chat(user, "<span class='warning'>\The [src] already has a tank installed!</span>")
-		else
-			user.drop_item()
+		else if(user.unEquipActive())
 			W.forceMove(src)
 			tank = W
 			user.visible_message("<span class='notice'>\The [user] installs \the [tank] into \the [src].</span>", "<span class='notice'>You install \the [tank] into \the [src].</span>")

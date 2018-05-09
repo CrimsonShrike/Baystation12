@@ -59,7 +59,8 @@
 		if(w_items + I.w_class > 5)
 			to_chat(user, "<span class='notice'>The cistern is full.</span>")
 			return
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		I.loc = src
 		w_items += I.w_class
 		to_chat(user, "You carefully place \the [I] into the cistern.")

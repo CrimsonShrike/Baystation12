@@ -20,9 +20,8 @@
 		if(beaker)
 			to_chat(user, "\The [src] is already loaded.")
 			return
-
+		if(!user.unEquipActive()) return
 		beaker = O
-		user.drop_item()
 		O.loc = src
 
 		user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")
@@ -37,8 +36,8 @@
 			to_chat(user, "The dish tray is aleady full!")
 			return
 
+		if(!user.unEquipActive()) return
 		dish = O
-		user.drop_item()
 		O.loc = src
 
 		user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")

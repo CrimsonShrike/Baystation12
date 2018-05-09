@@ -280,7 +280,7 @@
 								 "<span class='notice'>You hear rustling of clothes.</span>")
 			return
 
-		if(usr.drop_item())
+		if(user.unEquipActive())
 			W.forceMove(loc)
 			W.pixel_x = 0
 			W.pixel_y = 0

@@ -119,14 +119,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(user, "A disk is already loaded into the machine.")
 			return
 
-		if(istype(D, /obj/item/weapon/disk/tech_disk))
+		if(istype(D, /obj/item/weapon/disk/tech_disk) && user.unEquipActive())
 			t_disk = D
-		else if (istype(D, /obj/item/weapon/disk/design_disk))
+		else if (istype(D, /obj/item/weapon/disk/design_disk) && user.unEquipActive())
 			d_disk = D
 		else
 			to_chat(user, "<span class='notice'>Machine cannot accept disks in that format.</span>")
 			return
-		user.drop_item()
 		D.loc = src
 		to_chat(user, "<span class='notice'>You add \the [D] to the machine.</span>")
 	else

@@ -67,7 +67,7 @@
 	if(!get_active_hand())
 		to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
 	else
-		drop_item()
+		unEquipActive()
 
 //This gets called when you press the delete button.
 /client/verb/delete_key_pressed()

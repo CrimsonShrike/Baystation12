@@ -49,12 +49,11 @@
 					to_chat(user, "<span class='notice'>You unfasten the frame.</span>")
 					anchored = 0
 					state = 0
-			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
+			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit && user.unEquipActive())
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You place the circuit board inside the frame.</span>")
 				icon_state = "1"
 				circuit = P
-				user.drop_item()
 				P.loc = src
 			if(isScrewdriver(P) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
@@ -153,10 +152,11 @@
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
+				if(!user.unEquipActive())
+					return
 				if(B.mind)
 					clear_antag_roles(B.mind, 1)
 
-				user.drop_item()
 				P.loc = src
 				brain = P
 				to_chat(usr, "Added [P].")

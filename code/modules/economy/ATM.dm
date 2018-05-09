@@ -79,8 +79,7 @@
 			return
 
 		var/obj/item/weapon/card/id/idcard = I
-		if(!held_card)
-			usr.drop_item()
+		if(!held_card && user.unEquipActive())
 			idcard.loc = src
 			held_card = idcard
 			if(authenticated_account && held_card.associated_account_number != authenticated_account.account_number)
@@ -419,8 +418,7 @@
 						to_chat(usr, "\icon[src] <span class='warning'>The ATM card reader rejected your ID because this machine has been sabotaged!</span>")
 					else
 						var/obj/item/I = usr.get_active_hand()
-						if (istype(I, /obj/item/weapon/card/id))
-							usr.drop_item()
+						if (istype(I, /obj/item/weapon/card/id) && usr.unEquipActive())
 							I.loc = src
 							held_card = I
 				else

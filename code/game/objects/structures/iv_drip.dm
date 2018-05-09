@@ -69,7 +69,8 @@
 		if(!isnull(src.beaker))
 			to_chat(user, "There is already a reagent container loaded!")
 			return
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		W.forceMove(src)
 		beaker = W
 		to_chat(user, "You attach \the [W] to \the [src].")
@@ -97,7 +98,7 @@
 
 	if(!beaker)
 		return
-	
+
 	//SSObj fires twice as fast as SSMobs, so gotta slow down to not OD our victims.
 	if(SSobj.times_fired % 2)
 		return
@@ -109,7 +110,7 @@
 	else // Take blood
 		var/amount = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		amount = min(amount, 4)
-		
+
 		if(amount == 0) // If the beaker is full, ping
 			if(prob(5)) visible_message("\The [src] pings.")
 			return
@@ -154,7 +155,7 @@
 /obj/structure/iv_drip/examine(mob/user)
 	. = ..(user)
 
-	if (get_dist(src, user) > 2) 
+	if (get_dist(src, user) > 2)
 		return
 
 	to_chat(user, "The IV drip is [mode ? "injecting" : "taking blood"].")

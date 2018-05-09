@@ -715,8 +715,7 @@
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
-			if(E.can_attach(src))
-				user.drop_item()
+			if(E.can_attach(src) && user.unEquipActive())
 				E.attach(src)
 				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
 			else
@@ -787,9 +786,8 @@
 
 	else if(istype(W, /obj/item/weapon/cell))
 		if(state==4)
-			if(!src.cell)
+			if(!src.cell && user.unEquipActive())
 				to_chat(user, "You install the powercell")
-				user.drop_item()
 				W.forceMove(src)
 				src.cell = W
 				src.log_message("Powercell installed")

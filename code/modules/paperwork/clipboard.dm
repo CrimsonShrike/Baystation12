@@ -46,7 +46,7 @@
 /obj/item/weapon/clipboard/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
-		user.drop_item()
+		if(!user.unEquipActive()) return
 		W.loc = src
 		if(istype(W, /obj/item/weapon/paper))
 			toppaper = W
@@ -100,7 +100,7 @@
 			if(!haspen)
 				var/obj/item/weapon/pen/W = usr.get_active_hand()
 				if(istype(W, /obj/item/weapon/pen))
-					usr.drop_item()
+					if(!usr.unEquipActive()) return
 					W.loc = src
 					haspen = W
 					to_chat(usr, "<span class='notice'>You slot the pen into \the [src].</span>")

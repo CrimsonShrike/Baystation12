@@ -25,17 +25,16 @@
 	if(src.contents.len > sandwich_limit)
 		to_chat(user, "<span class='wwarning'>If you put anything else on \the [src] it's going to collapse.</span>")
 		return
-	else if(istype(W,/obj/item/weapon/material/shard))
+	else if(istype(W,/obj/item/weapon/material/shard) && user.unEquipActive())
 		to_chat(user, "<span class='warning'>You hide [W] in \the [src].</span>")
 		user.drop_item()
 		W.loc = src
 		update()
 		return
-	else if(istype(W,/obj/item/weapon/reagent_containers/food/snacks))
+	else if(istype(W,/obj/item/weapon/reagent_containers/food/snacks) && user.unEquipActive())
 		to_chat(user, "<span class='warning'>You layer [W] over \the [src].</span>")
 		var/obj/item/weapon/reagent_containers/F = W
 		F.reagents.trans_to_obj(src, F.reagents.total_volume)
-		user.drop_item()
 		W.loc = src
 		ingredients += W
 		update()

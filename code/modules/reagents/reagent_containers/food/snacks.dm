@@ -3102,8 +3102,7 @@
 			for(var/obj/item/pizzabox/i in box.boxes)
 				boxestoadd += i
 
-			if( (boxes.len+1) + boxestoadd.len <= 5 )
-				user.drop_item()
+			if( (boxes.len+1) + boxestoadd.len <= 5  && user.unEquipActive())
 
 				box.loc = src
 				box.boxes = list() // clear the box boxes so we don't have boxes inside boxes. - Xzibit
@@ -3122,8 +3121,7 @@
 
 	if( istype(I, /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/) ) // Long ass fucking object name
 
-		if( src.open )
-			user.drop_item()
+		if( src.open && user.unEquipActive() )
 			I.loc = src
 			src.pizza = I
 

@@ -1,24 +1,24 @@
-/obj/item/organ_module
+/obj/item/organ/augment
 	name = "embedded organ module"
 	desc = "Embedded organ module."
-	icon = 'icons/obj/surgery.dmi'
-	var/list/allowed_organs = list() // Surgery. list of organ_tags. BP_R_ARM, BP_L_ARM, BP_HEAD, etc.
+	icon = 'icons/obj/augment.dmi'
+	//By default these fit on both flesh and robotic organs and are robotic
+	status = ORGAN_ROBOT
+	var/augment_flags = AUGMENTATION_MECHANIC | AUGMENTATION_ORGANIC
 
 //General expectation is onInstall and onRemoved are overwritten to add effects to augmentee
-/obj/item/organ_module/proc/install(var/obj/item/organ/external/E)
-	E.module = src
-	src.forceMove(E)
-	onInstall(E)
+/obj/item/organ/augment/replaced(var/mob/living/carbon/human/target)
+	..()
 
-/obj/item/organ_module/proc/onInstall(var/obj/item/organ/external/E)
+	if(istype(owner))
+		onInstall()
 
-/obj/item/organ_module/proc/remove(var/obj/item/organ/external/E)
-	E.module = null
-	src.forceMove(get_turf(E))
-	onRemove(E)
+/obj/item/organ_module/proc/onInstall()
 
-/obj/item/organ_module/proc/onRemove(var/obj/item/organ/external/E)
 
-/obj/item/organ_module/proc/organ_removed(var/obj/item/organ/external/E, var/mob/living/carbon/human/H)
+/obj/item/organ/augment/removed(var/mob/living/user, var/drop_organ=1)
+	onRemove()
+	..()
 
-/obj/item/organ_module/proc/organ_installed(var/obj/item/organ/external/E, var/mob/living/carbon/human/H)
+/obj/item/organ_module/proc/onRemove()
+

@@ -147,7 +147,7 @@
 	if(user == occupant)
 		return STATUS_CLOSE
 	return ..()
-	    
+
 /obj/machinery/atmospherics/unary/cryo_cell/OnTopic(user, href_list)
 	if(href_list["switchOn"])
 		on = 1
@@ -177,9 +177,9 @@
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
 			return
-
+		if(!user.unEquipActive())
+			return
 		beaker =  G
-		user.drop_item()
 		G.forceMove(src)
 		user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
 	else if(istype(G, /obj/item/grab))

@@ -610,8 +610,7 @@
 			to_chat(user, "The radio can't hold another key!")
 			return
 
-		if(!keyslot)
-			user.drop_item()
+		if(!keyslot && user.unEquipActive())
 			W.loc = src
 			keyslot = W
 

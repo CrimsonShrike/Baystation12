@@ -13,5 +13,6 @@
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 
 	afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		src.throw_at(target, throw_range, throw_speed, user)

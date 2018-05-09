@@ -16,9 +16,8 @@
 	if(dish)
 		to_chat(user, "\The [src] is already loaded.")
 		return
-
+	if(!user.unEquipActive()) return
 	dish = O
-	user.drop_item()
 	O.loc = src
 
 	user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")

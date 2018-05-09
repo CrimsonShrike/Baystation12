@@ -27,8 +27,7 @@
 	. = ..()
 
 /obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/book))
-		user.drop_item()
+	if(istype(O, /obj/item/weapon/book) && user.unEquipActive())
 		O.loc = src
 		update_icon()
 	else if(istype(O, /obj/item/weapon/pen))
@@ -167,8 +166,7 @@
 /obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(carved == 1)
 		if(!store)
-			if(W.w_class < ITEM_SIZE_NORMAL)
-				user.drop_item()
+			if(W.w_class < ITEM_SIZE_NORMAL && user.unEquipActive())
 				W.loc = src
 				store = W
 				to_chat(user, "<span class='notice'>You put [W] in [title].</span>")

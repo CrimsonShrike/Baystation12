@@ -91,7 +91,7 @@
 	if(isrobot(user))	return //Carn: fix for borgs dropping their modules on conveyor belts
 	if(I.loc != user)	return // This should stop mounted modules ending up outside the module.
 
-	user.drop_item(get_turf(src))
+	user.unEquipActive(get_turf(src))
 	return
 
 // attack with hand, move pulled object onto conveyor

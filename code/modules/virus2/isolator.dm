@@ -35,8 +35,8 @@
 		to_chat(user, "\The [src] is already loaded.")
 		return
 
+	if(!user.unEquipActive()) return
 	sample = S
-	user.drop_item()
 	S.loc = src
 
 	user.visible_message("[user] adds \a [O] to \the [src]!", "You add \a [O] to \the [src]!")

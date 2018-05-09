@@ -96,7 +96,7 @@
 			if(W.is_open_container())
 				W.atom_flags ^= ATOM_FLAG_OPEN_CONTAINER
 				W.update_icon()
-			user.drop_item()
+			if(!user.unEquipActive()) return
 			W.forceMove(src)
 			loaded_vial = W
 			reagents.maximum_volume = loaded_vial.reagents.maximum_volume

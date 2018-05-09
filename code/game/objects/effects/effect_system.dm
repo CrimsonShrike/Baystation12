@@ -222,7 +222,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/bad/affect(var/mob/living/carbon/M)
 	if (!..())
 		return 0
-	M.drop_item()
+	M.unEquipActive()
 	M.adjustOxyLoss(1)
 	if (M.coughedtime != 1)
 		M.coughedtime = 1
@@ -251,7 +251,7 @@ steam.start() -- spawns the effect
 	if (!..())
 		return 0
 
-	M.drop_item()
+	M.unEquipActive()
 	M:sleeping += 1
 	if (M.coughedtime != 1)
 		M.coughedtime = 1

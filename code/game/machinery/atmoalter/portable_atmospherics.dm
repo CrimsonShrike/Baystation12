@@ -103,8 +103,9 @@
 	if ((istype(W, /obj/item/weapon/tank) && !( src.destroyed )))
 		if (src.holding)
 			return
+		if(!user.unEquipActive())
+			return
 		var/obj/item/weapon/tank/T = W
-		user.drop_item()
 		T.forceMove(src)
 		src.holding = T
 		update_icon()
@@ -158,8 +159,8 @@
 			return
 
 		var/obj/item/weapon/cell/C = I
-
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		C.add_fingerprint(user)
 		cell = C
 		C.forceMove(src)

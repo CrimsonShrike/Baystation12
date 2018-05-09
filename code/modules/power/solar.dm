@@ -257,9 +257,8 @@ var/list/solars_list = list()
 			return 1
 
 	if(!tracker)
-		if(istype(W, /obj/item/weapon/tracker_electronics))
+		if(istype(W, /obj/item/weapon/tracker_electronics) && user.unEquipActive())
 			tracker = 1
-			user.drop_item()
 			qdel(W)
 			user.visible_message("<span class='notice'>[user] inserts the electronics into the solar assembly.</span>")
 			return 1

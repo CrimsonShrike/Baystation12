@@ -482,7 +482,8 @@
 			to_chat(user, "\The [W] is too [W.w_class < ITEM_SIZE_NORMAL? "small" : "large"] to fit here.")
 			return
 
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		W.forceMove(src)
 		cell = W
 		user.visible_message(\

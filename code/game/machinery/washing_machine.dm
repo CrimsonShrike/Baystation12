@@ -86,8 +86,7 @@
 /obj/machinery/washing_machine/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/pen/crayon) || istype(W,/obj/item/weapon/stamp))
 		if( state in list(	1, 3, 6 ) )
-			if(!crayon)
-				user.drop_item()
+			if(!crayon && user.unEquipActive())
 				crayon = W
 				crayon.forceMove(src)
 			else
@@ -151,8 +150,7 @@
 			return
 
 		if(contents.len < 5)
-			if ( state in list(1, 3) )
-				user.drop_item()
+			if ( state in list(1, 3) && user.unEquipActive())
 				W.loc = src
 				state = 3
 			else

@@ -104,9 +104,8 @@
 	return
 
 /obj/machinery/pipedispenser/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter))
+	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter) && user.unEquipActive())
 		to_chat(usr, "<span class='notice'>You put \the [W] back into \the [src].</span>")
-		user.drop_item()
 		add_fingerprint(usr)
 		qdel(W)
 		return

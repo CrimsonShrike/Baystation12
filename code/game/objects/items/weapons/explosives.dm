@@ -49,7 +49,8 @@
 	user.do_attack_animation(target)
 
 	if(do_after(user, 50, target) && in_range(user, target))
-		user.drop_item()
+		if(!user.unEquipActive()) //Somehow bomb is glued to your hand?
+			return
 		src.target = target
 		forceMove(null)
 

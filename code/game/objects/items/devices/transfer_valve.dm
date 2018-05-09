@@ -27,8 +27,8 @@
 		if(tank_one && tank_two)
 			to_chat(user, "<span class='warning'>There are already two tanks attached, remove one first.</span>")
 			return
-
-		user.drop_item()
+		if(!user.unEquipActive())
+			return
 		item.forceMove(src)
 		if(!tank_one)
 			tank_one = item

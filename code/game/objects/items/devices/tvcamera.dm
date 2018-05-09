@@ -110,17 +110,15 @@ Using robohead because of restricting to roboticist */
 /obj/item/weapon/TVAssembly/attackby(W, mob/user)
 	switch(buildstep)
 		if(0)
-			if(istype(W, /obj/item/robot_parts/robot_component/camera))
+			if(istype(W, /obj/item/robot_parts/robot_component/camera) && user.unEquipActive())
 				var/obj/item/robot_parts/robot_component/camera/CA = W
 				to_chat(user, "<span class='notice'>You add the camera module to [src]</span>")
-				user.drop_item()
 				qdel(CA)
 				desc = "This TV camera assembly has a camera module."
 				buildstep++
 		if(1)
-			if(istype(W, /obj/item/device/taperecorder))
+			if(istype(W, /obj/item/device/taperecorder) && user.unEquipActive())
 				var/obj/item/device/taperecorder/T = W
-				user.drop_item()
 				qdel(T)
 				buildstep++
 				to_chat(user, "<span class='notice'>You add the tape recorder to [src]</span>")

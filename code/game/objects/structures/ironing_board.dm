@@ -86,7 +86,7 @@
 			to_chat(user, "<span class='notice'>[buckled_mob] is already on the ironing table!</span>")
 			return
 
-		if(user.drop_item())
+		if(user.unEquipActive())
 			cloth = I
 			I.forceMove(src)
 			GLOB.destroyed_event.register(I, src, /obj/structure/bed/roller/ironingboard/proc/remove_item)
@@ -95,7 +95,7 @@
 	else if(istype(I,/obj/item/weapon/ironingiron))
 		var/obj/item/weapon/ironingiron/R = I
 
-		if(!holding && !R.enabled && user.drop_item())
+		if(!holding && !R.enabled && user.unEquipActive())
 			holding = R
 			I.forceMove(src)
 			GLOB.destroyed_event.register(I, src, /obj/structure/bed/roller/ironingboard/proc/remove_item)
@@ -107,7 +107,7 @@
 			var/mob/living/carbon/human/H = buckled_mob
 			var/zone = user.zone_sel.selecting
 			var/parsed = parse_zone(zone)
-		
+
 			visible_message("<span class='danger'>[user] begins ironing [src.buckled_mob]'s [parsed]!</span>", "<span class='danger'>You begin ironing [buckled_mob]'s [parsed]!</span>")
 			if(!do_after(user, 40, src))
 				return

@@ -130,7 +130,6 @@
 
 /datum/surgery_step/cavity/place_item/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/chest/affected = target.get_organ(target_zone)
-
 	user.visible_message("<span class='notice'>[user] puts \the [tool] inside [target]'s [affected.cavity_name] cavity.</span>", \
 	"<span class='notice'>You put \the [tool] inside [target]'s [affected.cavity_name] cavity.</span>" )
 	if (tool.w_class > affected.cavity_max_w_class/2 && prob(50) && !(affected.robotic >= ORGAN_ROBOT) && affected.sever_artery())
