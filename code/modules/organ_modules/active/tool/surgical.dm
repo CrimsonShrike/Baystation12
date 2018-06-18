@@ -1,4 +1,4 @@
-/obj/item/organ_module/active/polytool/surgical
+/obj/item/organ/augment/active/polytool/surgical
 	name = "Surgical toolset"
 	verb_name = "Deploy surgical tool"
 	desc = "Part of Zeng-Hu Pharmaceutical's line of biomedical augmentations, this device contains the full set of tools any surgeon would ever need"

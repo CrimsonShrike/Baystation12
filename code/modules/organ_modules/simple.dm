@@ -31,27 +31,27 @@
 	else if(limb.organ_tag in list(BP_R_ARM, BP_R_HAND))
 		slot = slot_r_hand
 	if(owner.equip_to_slot_if_possible(holding, slot))
-		GLOB.item_unequipped_event.register(holding, src, /obj/item/organ_module/active/simple/proc/holding_dropped )
+		GLOB.item_unequipped_event.register(holding, src, /obj/item/organ/augment/active/simple/proc/holding_dropped )
 		owner.visible_message(
-			SPAN_WARNING("[owner] extends \his [holding.name] from [E]."),
-			SPAN_NOTICE("You extend your [holding.name] from [E].")
+			SPAN_WARNING("[owner] extends \his [holding.name] from [parent_organ]."),
+			SPAN_NOTICE("You extend your [holding.name] from [parent_organ].")
 		)
 
-/obj/organ/augment/active/simple/proc/retract()
+/obj/item/organ/augment/active/simple/proc/retract()
 	if(holding.loc == src)
 		return
 
-	if(ismob(holding.loc) && holding.loc == H)
+	if(ismob(holding.loc) && holding.loc == owner)
 		var/mob/M = holding.loc
 		M.drop_from_inventory(holding, src)
 		M.visible_message(
-			SPAN_WARNING("[M] retracts \his [holding.name] into [E]."),
-			SPAN_NOTICE("You retract your [holding.name] into [E].")
+			SPAN_WARNING("[M] retracts \his [holding.name] into [parent_organ]."),
+			SPAN_NOTICE("You retract your [holding.name] into [parent_organ].")
 		)
 
 
 
-/obj/item/organ_module/active/simple/activate()
+/obj/item/organ/augment/active/simple/activate()
 	if(!can_activate())
 		return
 
@@ -60,13 +60,13 @@
 	else //retract item
 		retract()
 
-/obj/item/organ_module/active/simple/deactivate(mob/living/carbon/human/H, obj/item/organ/external/E)
+/obj/item/organ/augment/active/simple/deactivate(mob/living/carbon/human/H, obj/item/organ/external/E)
 	retract(H, E)
 
 
 
 
-/obj/item/organ_module/active/simple/can_activate()
+/obj/item/organ/augment/active/simple/can_activate()
 	if(..())
 		if(!holding)
 			owner.visible_message(owner, SPAN_WARNING("The device is damaged and fails to deploy"))

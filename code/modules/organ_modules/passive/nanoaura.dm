@@ -30,8 +30,8 @@
 	var/obj/aura/nanoaura = null
 
 
-/obj/item/organ_module/nanounit/onInstall()
+/obj/item/organ/augment/nanounit/onInstall()
 	nanoaura = new /obj/aura/nanoaura(owner)
 
-/obj/item/organ_module/nanounit/onRemove()
+/obj/item/organ/augment/nanounit/onRemove()
 	QDEL_NULL(nanoaura)

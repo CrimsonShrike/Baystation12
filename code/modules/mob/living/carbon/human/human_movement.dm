@@ -63,10 +63,8 @@
 				tally += 1.5
 
 			//This may need a more generic way, maybe move to organ level
-			if(E && E.module)
-				var/obj/item/organ_module/muscle/M = E.module
-				if(M && istype(M))
-					tally -= M.tally
+		for(var/obj/item/organ/augment/muscle/B in src)
+			tally += B.tally
 
 	if(shock_stage >= 10) tally += 3
 

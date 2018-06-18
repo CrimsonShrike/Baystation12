@@ -2006,7 +2006,6 @@
 #include "code\modules\organ_modules\active.dm"
 #include "code\modules\organ_modules\organ_module.dm"
 #include "code\modules\organ_modules\simple.dm"
-#include "code\modules\organ_modules\surgery.dm"
 #include "code\modules\organ_modules\active\armblades.dm"
 #include "code\modules\organ_modules\active\polytool.dm"
 #include "code\modules\organ_modules\active\tool\engineering.dm"
