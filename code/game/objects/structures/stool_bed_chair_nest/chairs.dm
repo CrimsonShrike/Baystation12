@@ -219,4 +219,9 @@
 	icon_state = "shuttle_chair_preview"
 
 /obj/structure/bed/chair/shuttle/New(var/newloc,var/newmaterial)
-	..(newloc,"steel","black")
+	..(newloc,"steel","cotton")
+
+/obj/structure/bed/chair/shuttle/passenger
+	name = "passenger seat"
+	base_icon = "passenger_chair"
+	icon_state = "passenger_chair_preview"
