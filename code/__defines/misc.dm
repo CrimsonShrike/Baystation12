@@ -79,6 +79,7 @@
 #define AREA_FLAG_EXTERNAL          2 // External as in exposed to space, not outside in a nice, green, forest
 #define AREA_FLAG_ION_SHIELDED      4 // shielded from ionospheric anomalies as an FBP / IPC
 #define AREA_FLAG_IS_NOT_PERSISTENT 8 // SSpersistence will not track values from this area.
+#define AREA_FLAG_HIDE_FROM_HOLOMAP 16 // if we shouldn't be drawn on station holomaps
 
 //Map template flags
 #define TEMPLATE_FLAG_ALLOW_DUPLICATES 1 // Lets multiple copies of the template to be spawned

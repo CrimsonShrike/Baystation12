@@ -71,6 +71,8 @@
 
 #define isspaceturf(A) istype(A, /turf/space)
 
+#define isopenturf(A) istype(A, /turf/simulated/open)
+
 #define ispAI(A) istype(A, /mob/living/silicon/pai)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
@@ -165,6 +167,8 @@
 #define SPAN_NOTICE(X) "<span class='notice'>[X]</span>"
 
 #define SPAN_WARNING(X) "<span class='warning'>[X]</span>"
+
+#define SPAN_STYLE(style, X) "<span style=\"[style]\">[X]</span>"
 
 #define SPAN_DANGER(X) "<span class='danger'>[X]</span>"
 
