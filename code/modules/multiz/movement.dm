@@ -68,6 +68,10 @@
 	if(species && species.can_overcome_gravity(src))
 		return 1
 	else
+		//Can you swim?
+		if(src.loc.submerged() && get_skill_value(SKILL_HAULING) >= SKILL_BASIC)
+			return 1
+
 		for(var/atom/a in src.loc)
 			if(a.atom_flags & ATOM_FLAG_CLIMBABLE)
 				return 1
@@ -200,6 +204,17 @@
 
 	if((locate(/obj/structure/disposalpipe/up) in below) || locate(/obj/machinery/atmospherics/pipe/zpipe/up in below))
 		return FALSE
+/mob/can_fall(var/anchor_bypass = FALSE, var/turf/location_override = src.loc)
+	if(..())
+		if(get_skill_value(SKILL_HAULING) < SKILL_BASIC)
+			return TRUE
+		else
+			var/turf/below = GetBelow(location_override)
+			if(location_override.submerged()) //We can keep afloat
+				return FALSE
+			else if(below && below.submerged() && src.loc.check_fluid_depth(FLUID_SHALLOW)) // We're "swimming" at top
+				return FALSE
+			return FALSE
 
 /mob/living/carbon/human/can_fall()
 	if(..())
@@ -213,10 +228,15 @@
 		handle_fall_effect(landing)
 
 /atom/movable/proc/handle_fall_effect(var/turf/landing)
-	if(istype(landing, /turf/simulated/open))
+	if(landing.check_fluid_depth(FLUID_OVER_MOB_HEAD)) //A bunch of water overrides any other effect
+		visible_message("The water swirls as \the [src] falls from the deck above!", "You hear the burble of displaced water.")
+	else if(istype(landing, /turf/simulated/open))
 		visible_message("\The [src] falls from the deck above through \the [landing]!", "You hear a whoosh of displaced air.")
 	else
-		visible_message("\The [src] falls from the deck above and slams into \the [landing]!", "You hear something slam into the deck.")
+		if(landing.get_fluid_depth() >= FLUID_SHALLOW)
+			visible_message("\The [src] falls from the deck above and slams into \the [landing]! What a splash!", "You hear something slam into the deck, splashing water.")
+		else
+			visible_message("\The [src] falls from the deck above and slams into \the [landing]!", "You hear something slam into the deck.")
 		if(fall_damage())
 			for(var/mob/living/M in landing.contents)
 				visible_message("\The [src] hits \the [M.name]!")
