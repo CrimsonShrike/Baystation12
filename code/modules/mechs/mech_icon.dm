@@ -5,7 +5,7 @@ proc/get_mech_image(var/decal, var/cache_key, var/cache_icon, var/image_colour, 
 		if(image_colour)
 			I.color = image_colour
 		if(decal)
-			var/decal_key = "decal-[cache_key]"
+			var/decal_key = "[decal]-[cache_key]"
 			if(!GLOB.mech_icon_cache[decal_key])
 				var/template_key = "template-[cache_key]"
 				if(!GLOB.mech_icon_cache[template_key])
