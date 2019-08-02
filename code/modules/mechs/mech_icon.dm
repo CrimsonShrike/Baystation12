@@ -51,7 +51,7 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 	if(update_overlays && LAZYLEN(pilot_overlays))
 		overlays -= pilot_overlays
 	pilot_overlays = null
-	if(!body || ((body.pilot_coverage < 100 || body.transparent_cabin) && !body.hide_pilot))
+	if(TRUE || !body || ((body.pilot_coverage < 100 || body.transparent_cabin) && !body.hide_pilot))
 		for(var/i = 1 to LAZYLEN(pilots))
 			var/mob/pilot = pilots[i]
 			var/image/draw_pilot = new
@@ -65,7 +65,17 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 				draw_pilot.pixel_y = pilot.default_pixel_y + directional_offset_values["y"]
 				draw_pilot.pixel_z = 0
 				draw_pilot.transform = null
-			LAZYADD(pilot_overlays, draw_pilot)
+			var/image/mask = image(icon = body.on_mech_icon, icon_state = "[body.icon_state]_mask")
+		
+			mask.layer = MECH_PILOT_LAYER
+			mask.plane = FLOAT_PLANE
+			draw_pilot.appearance_flags = KEEP_TOGETHER
+			mask.appearance_flags = KEEP_TOGETHER
+			draw_pilot.layer = MECH_PILOT_LAYER 
+
+			mask.vis_contents += draw_pilot
+			src.vis_contents.Add(mask)
+			//LAZYADD(pilot_overlays, mask)
 		if(update_overlays && LAZYLEN(pilot_overlays))
 			overlays += pilot_overlays
 
