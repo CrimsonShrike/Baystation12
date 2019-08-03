@@ -1,7 +1,6 @@
 /mob/living/exosuit
 	movement_handlers = list(
-		/datum/movement_handler/mob/space/exosuit,
-		/datum/movement_handler/mob/exosuit
+		/datum/movement_handler/mob/space/exosuit
 	)
 
 /mob/living/exosuit/Move()
@@ -18,12 +17,25 @@
 	// 	if(T.density)
 	// 		return 1
 
+// /proc/InsertIntoList(var/list/L, var/the_thing, var/list/inserters)
+//     for(var/inserter_type in inserters)
+//         var/decl/.../inserter = decls_repository.get_decl(inserter_type)
+//         var/the_args = inserters[inserter_type] || list()
+//         the_args |= the_list
+//         the_args |= the_thing
+//         if(inserter.Insert(list2params(the_args))
+//             break
+
+// InsertStuff(some_thing, list(/decl/list_inserter_MK_II, /decl/list_inserter_MK_II/insert_before_type = list(some_type_or_another)
+
+/mob/living/exosuit/Allow_Spacemove()
+	return 1
+
 
 /mob/living/exosuit/can_fall(var/anchor_bypass = FALSE, var/turf/location_override = src.loc)
 	//mechs are always anchored, so falling should always ignore it
 	if(..(TRUE, location_override))
 		return !(can_overcome_gravity())
-
 
 /datum/movement_handler/mob/exosuit
 	expected_host_type = /mob/living/exosuit
@@ -85,18 +97,10 @@
 /datum/movement_handler/mob/space/exosuit
 	expected_host_type = /mob/living/exosuit
 
-// Space movement
+// Space drifting
 /datum/movement_handler/mob/space/exosuit/DoMove(var/direction, var/mob/mover)
-
 	if(!mob.check_solid_ground())
 		mob.anchored = FALSE
-		var/allowmove = mob.Allow_Spacemove(0)
-		if(!allowmove)
-			return MOVEMENT_HANDLED
-		else if(allowmove == -1 && mob.handle_spaceslipping()) //Check to see if we slipped
-			return MOVEMENT_HANDLED
-		else
-			mob.inertia_dir = 0 //If not then we can reset inertia and move
 	else mob.anchored = TRUE
 
 /datum/movement_handler/mob/space/exosuit/MayMove(var/mob/mover, var/is_external)
@@ -105,8 +109,43 @@
 
 	if(!mob.check_solid_ground())
 		if(!mob.Allow_Spacemove(0))
-			return MOVEMENT_STOP
+			return MOVEMENT_STOP //we will be drifting
 	return MOVEMENT_PROCEED
+
+//Actual powered movement through space
+/datum/movement_handler/mob/space/exosuit/powered/DoMove(var/direction, var/mob/mover)
+
+	if(!mob.check_solid_ground())
+		mob.anchored = FALSE
+		var/allowmove = mob.Allow_Spacemove(0)
+		if(!allowmove)
+			return MOVEMENT_PROCEED
+		mob.inertia_dir = 0 //If not then we can reset inertia and move
+	else mob.anchored = TRUE
+
+/datum/movement_handler/mob/space/exosuit/powered/MayMove(var/mob/mover, var/is_external)
+	var/mob/living/exosuit/exosuit = host
+	if(world.time < next_move)
+		return MOVEMENT_PROCEED //Not my problem
+	if((!(mover in exosuit.pilots) && mover != exosuit) || exosuit.incapacitated() || mover.incapacitated())
+		return MOVEMENT_STOP
+	if(!exosuit.legs)
+		to_chat(mover, SPAN_WARNING("\The [exosuit] has no means of propulsion!"))
+		next_move = world.time + 3 // Just to stop them from getting spammed with messages.
+		return MOVEMENT_STOP
+	if(!exosuit.legs.motivator || !exosuit.legs.motivator.is_functional())
+		to_chat(mover, SPAN_WARNING("Your motivators are damaged! You can't move!"))
+		next_move = world.time + 15
+		return MOVEMENT_STOP
+	if(exosuit.maintenance_protocols)
+		to_chat(mover, SPAN_WARNING("Maintenance protocols are in effect."))
+		next_move = world.time + 3 // Just to stop them from getting spammed with messages.
+		return MOVEMENT_STOP
+	var/obj/item/weapon/cell/C = exosuit.get_cell()
+	if(!C || !C.check_charge(exosuit.legs.power_use * CELLRATE))
+		to_chat(mover, SPAN_WARNING("The power indicator flashes briefly."))
+		next_move = world.time + 3 //On fast exosuits this got annoying fast
+		return MOVEMENT_STOP
 
 /mob/living/exosuit/lost_in_space()
 	for(var/atom/movable/AM in contents)

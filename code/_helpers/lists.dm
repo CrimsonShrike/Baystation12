@@ -749,3 +749,22 @@ proc/dd_sortedTextList(list/incoming)
 	for(var/key in L)
 		if(ispath(T, key))
 			return key
+
+//Helps inserting at arbitrary spot in list
+/decl/list_inserter/proc/Insert(var/list/L, var/thing)
+    L.Add(thing)
+    return TRUE
+
+/decl/list_inserter/insert_before_type/Insert(var/type_to_be_inserted_before, var/list/L, var/thing)
+    for(var/index = 1 to L.len)
+        if(L[index].type == type_to_be_inserted_before)
+            L.Insert(index-1, thing)
+            return TRUE
+    return FALSE
+
+/decl/list_inserter/insert_after_type/Insert(var/type_to_be_inserted_after, var/list/L, var/thing)
+    for(var/index = 1 to L.len)
+        if(L[index].type == type_to_be_inserted_after)
+            L.Insert(index, thing)
+            return TRUE
+    return FALSE

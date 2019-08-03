@@ -16,6 +16,8 @@
 	var/power_use = 0
 	matter = list(MATERIAL_STEEL = 15000, MATERIAL_PLASTIC = 1000, MATERIAL_OSMIUM = 500)
 	dir = SOUTH
+	var/list/provided_movement_handlers = list()
+	var/list/provided_handlers_relative_pos = list()
 
 /obj/item/mech_component/proc/set_colour(new_colour)
 	var/last_colour = color
@@ -43,6 +45,10 @@
 	return
 
 /obj/item/mech_component/proc/prebuild()
+	return
+
+//Once the exosuit actually exists, add any extra logic
+/obj/item/mech_component/proc/finishInit(var/mob/living/exosuit/owner)
 	return
 
 /obj/item/mech_component/proc/install_component(var/obj/item/thing, var/mob/user)

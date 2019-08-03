@@ -104,6 +104,8 @@
 		if(LAZYLEN(comp.has_hardpoints))
 			for(var/hardpoint in comp.has_hardpoints)
 				hardpoints[hardpoint] = null
+		//Let them perform any alterations to the exosuit.
+		comp.finishInit(src)
 
 	if(head && head.radio)
 		radio = new(src)

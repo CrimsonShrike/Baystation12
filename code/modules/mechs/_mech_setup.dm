@@ -20,7 +20,7 @@ GLOBAL_LIST_INIT(mech_weapon_overlays, icon_states('icons/mecha/mech_weapon_over
 #define MECH_SOFTWARE_MEDICAL "medical support systems"          // Sleeper.
 #define MECH_SOFTWARE_WEAPONS "standard weapon systems"          // Ballistics and energy weapons.
 #define MECH_SOFTWARE_ADVWEAPONS "advanced weapon systems"       // Railguns, missile launcher.
-#define MECH_SOFTWARE_ENGINEERING "advanced engineering systems" // RCD.
+#define MECH_SOFTWARE_ENGINEERING "advanced engineering systems" // RCD, extinguisher.
 
 // EMP damage points before various effects occur.
 #define EMP_GUI_DISRUPT 5     // 1 ion rifle shot == 8.
