@@ -71,3 +71,56 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 
 /mob/living/exosuit/regenerate_icons()
 	return
+
+
+
+//the object prototype for our root object:
+/obj/masktest
+    appearance_flags = KEEP_TOGETHER
+    var/obj/foreground
+    var/obj/background
+    var/obj/fill
+    var/obj/mask
+
+//the object prototypes for our four pieces:
+
+/obj/maskpart
+    layer = FLOAT_LAYER
+    plane = FLOAT_PLANE
+    icon = 'icons/mecha/mech_parts.dmi'
+
+/obj/maskpart/bg
+    appearance_flags = KEEP_TOGETHER
+    blend_mode = BLEND_MULTIPLY
+
+
+/obj/masktest
+
+
+/obj/masktest/New(newloc)
+    Build()
+    vis_contents.Add(fill)
+    ..()
+
+/obj/masktest/Destroy()
+    //break relationships
+    vis_contents.Remove(mask)
+    background.vis_contents -= fill
+    mask.vis_contents -= background
+    ..()
+
+
+/obj/masktest/proc/Build()
+            //create constituent objects
+
+
+            fill = new/obj/maskpart(src)
+            fill.appearance_flags = KEEP_TOGETHER
+            fill.blend_mode = BLEND_MULTIPLY
+            fill.icon_state = "pilot"
+            mask = new/obj/maskpart(src)
+            mask.icon_state = "mask"
+
+            //arrange constituent objects
+            fill.vis_contents += mask
+            background.vis_contents += fill
