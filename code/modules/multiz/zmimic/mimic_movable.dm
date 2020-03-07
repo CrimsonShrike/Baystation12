@@ -79,6 +79,7 @@
 	plane = OPENTURF_MAX_PLANE
 	layer = MIMICED_LIGHTING_LAYER
 	blend_mode = BLEND_MULTIPLY
+	var/darkening_factor = SHADOWER_DARKENING_FACTOR
 	color = list(
 		SHADOWER_DARKENING_FACTOR, 0, 0,
 		0, SHADOWER_DARKENING_FACTOR, 0,
@@ -103,26 +104,26 @@
 		// Bay stores lights as inverted so the lighting PM can invert it for darksight, but
 		//   we don't have a plane master, so invert it again.
 		var/list/c_list = color
-		c_list[CL_MATRIX_RR] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_RG] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_RB] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_GR] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_GG] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_GB] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_BR] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_BG] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_BB] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_AR] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_AG] *= -SHADOWER_DARKENING_FACTOR
-		c_list[CL_MATRIX_AB] *= -SHADOWER_DARKENING_FACTOR
+		c_list[CL_MATRIX_RR] *= -darkening_factor
+		c_list[CL_MATRIX_RG] *= -darkening_factor
+		c_list[CL_MATRIX_RB] *= -darkening_factor
+		c_list[CL_MATRIX_GR] *= -darkening_factor
+		c_list[CL_MATRIX_GG] *= -darkening_factor
+		c_list[CL_MATRIX_GB] *= -darkening_factor
+		c_list[CL_MATRIX_BR] *= -darkening_factor
+		c_list[CL_MATRIX_BG] *= -darkening_factor
+		c_list[CL_MATRIX_BB] *= -darkening_factor
+		c_list[CL_MATRIX_AR] *= -darkening_factor
+		c_list[CL_MATRIX_AG] *= -darkening_factor
+		c_list[CL_MATRIX_AB] *= -darkening_factor
 		color = c_list
 	else
 		// Not a color matrix, so we just ignore the lighting values.
 		icon_state = "dark"	// this is actually just a white sprite, which is what this blending needs
 		color = list(
-			SHADOWER_DARKENING_FACTOR, 0, 0,
-			0, SHADOWER_DARKENING_FACTOR, 0,
-			0, 0, SHADOWER_DARKENING_FACTOR
+			darkening_factor, 0, 0,
+			0, darkening_factor, 0,
+			0, 0, darkening_factor
 		)
 
 	var/turf/parent = loc

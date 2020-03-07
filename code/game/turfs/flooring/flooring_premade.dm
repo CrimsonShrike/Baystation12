@@ -171,6 +171,12 @@
 /turf/simulated/floor/cult/cultify()
 	return
 
+/turf/simulated/floor/glass
+	name = "glass floor"
+	icon = 'icons/turf/flooring/glass.dmi'
+	icon_state = "glass"
+	z_flags = ZM_MIMIC_DEFAULTS | ZM_MIMIC_NO_AO
+
 //Tiled floor + sub-types
 
 /turf/simulated/floor/tiled

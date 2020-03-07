@@ -53,6 +53,8 @@
 	if (under)
 		below = under
 		below.above = src
+		if(below.z_flags & ZM_NO_SHADOW)
+			shadower.darkening_factor = 1.0
 
 	update_mimic(!mapload)	// Only recursively update if the map isn't loading.
 

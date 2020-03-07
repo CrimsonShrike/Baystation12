@@ -20,6 +20,15 @@
 /turf/unsimulated/floor/shuttle_ceiling
 	icon_state = "reinforced"
 
+/turf/unsimulated/open
+	z_flags = ZM_MIMIC_DEFAULTS | ZM_MIMIC_NO_AO | ZM_MIMIC_OVERWRITE | ZM_NO_SHADOW
+	name = "open space"
+	icon = 'icons/turf/space.dmi'
+	icon_state = ""
+	dynamic_lighting = 0
+	temperature = T20C
+	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
+	initial_gas = null
 /turf/unsimulated/floor/steel
 	icon_state = "steel"
 

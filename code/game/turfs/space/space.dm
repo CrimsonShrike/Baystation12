@@ -11,6 +11,7 @@
 	permit_ao = FALSE
 
 	z_eventually_space = TRUE
+	z_flags = ZM_MIMIC_DEFAULTS | ZM_MIMIC_NO_AO | ZM_MIMIC_OVERWRITE | ZM_NO_SHADOW
 
 /turf/space/proc/build_dust_cache()
 	LAZYINITLIST(dust_cache)
