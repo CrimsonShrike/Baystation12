@@ -10,8 +10,8 @@
 /mob/living/bot/mulebot
 	name = "Mulebot"
 	desc = "A Multiple Utility Load Effector bot."
-	icon = 'icons/mob/bot/mulebot.dmi'
-	icon_state = "mulebot0"
+	icon = 'icons/mob/bot/mule.dmi'
+	icon_state = "mule"
 	layer = MOB_LAYER
 	anchored = 1
 	density = 1
@@ -38,9 +38,15 @@
 
 	var/global/amount = 0
 
-/mob/living/bot/mulebot/New()
-	..()
+/mob/living/bot/mulebot/fast
+	health = 100
+	maxHealth = 100
+	target_speed = 2
+	icon = 'icons/mob/bot/mulefast.dmi'
 
+/mob/living/bot/mulebot/Initialize()
+	. = ..()
+	
 	var/turf/T = get_turf(loc)
 	var/obj/machinery/navbeacon/N = locate() in T
 	if(N)
@@ -119,6 +125,8 @@
 			if("safety")
 				safety = !safety
 
+	update_icons()
+
 /mob/living/bot/mulebot/attackby(var/obj/item/O, var/mob/user)
 	..()
 	update_icons()
@@ -152,18 +160,23 @@
 	playsound(loc, 'sound/effects/sparks1.ogg', 100, 0)
 	return 1
 
-/mob/living/bot/mulebot/update_icons()
-	if(open)
-		icon_state = "mulebot-hatch"
-		return
+/mob/living/bot/mulebot/on_update_icon()
+	. = ..()
+	overlays.Cut()
 	if(target_path.len && !paused)
-		icon_state = "mulebot1"
-		return
-	icon_state = "mulebot0"
+		var/image/I = new (icon, icon_state = "mule-light-active")
+		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
+		I.layer = EYE_GLOW_LAYER
+		overlays += I
+	if(paused)
+		var/image/I = new (icon, icon_state = "mule-light-paused")
+		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
+		I.layer = EYE_GLOW_LAYER
+		overlays += I
 
 /mob/living/bot/mulebot/handleRegular()
-	if(!safety && prob(1))
-		flick("mulebot-emagged", src)
+	//if(!safety && prob(1))
+	//	flick("mulebot-emagged", src)
 	update_icons()
 
 /mob/living/bot/mulebot/handleFrustrated()

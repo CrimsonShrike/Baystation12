@@ -1,11 +1,12 @@
 /obj/vehicle/train/cargo/engine
 	name = "cargo train tug"
 	desc = "A ridable electric car designed for pulling cargo trolleys."
-	icon = 'icons/obj/vehicles.dmi'
-	icon_state = "cargo_engine"
+	icon = 'icons/obj/vehicles/tug.dmi'
+	icon_state = "tug"
 	on = 0
 	powered = 1
 	locked = 0
+	layer = BASE_ABOVE_OBJ_LAYER
 
 	load_item_visible = 1
 	load_offset_x = 0
@@ -19,35 +20,33 @@
 /obj/item/weapon/key/cargo_train
 	name = "key"
 	desc = "A keyring with a small steel key, and a yellow fob reading \"Choo Choo!\"."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/vehicles/tug.dmi'
 	icon_state = "train_keys"
 	w_class = ITEM_SIZE_TINY
-
-/obj/vehicle/train/cargo/trolley
-	name = "cargo train trolley"
-	icon = 'icons/obj/vehicles.dmi'
-	icon_state = "cargo_trailer"
-	anchored = 0
-	passenger_allowed = 0
-	locked = 0
-
-	load_item_visible = 1
-	load_offset_x = 0
-	load_offset_y = 4
-	buckle_pixel_shift = "x=0;y=0;z=8"
 
 //-------------------------------------------
 // Standard procs
 //-------------------------------------------
-/obj/vehicle/train/cargo/engine/New()
-	..()
+/obj/vehicle/train/cargo/engine/Initialize()
+	. = ..()
+
 	cell = new /obj/item/weapon/cell/high(src)
 	key = new(src)
-	var/image/I = new(icon = 'icons/obj/vehicles.dmi', icon_state = "cargo_engine_overlay")
-	I.plane = plane
-	I.layer = layer
-	overlays += I
+	update_icon()
 	turn_off()	//so engine verbs are correctly set
+
+/obj/vehicle/train/cargo/engine/on_update_icon()
+	. = ..()
+	overlays.Cut()
+	var/image/I = new(icon = 'icons/obj/vehicles/tug.dmi', icon_state = "tug_overlay")
+	I.layer = ABOVE_HUMAN_LAYER
+	overlays |= I
+	if(on)
+		I = new(icon = 'icons/obj/vehicles/tug.dmi', icon_state = "tug_light")
+		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
+		I.layer = EYE_GLOW_LAYER
+		overlays |= I
+	
 
 /obj/vehicle/train/cargo/engine/Move(var/turf/destination)
 	if(on && cell.charge < (charge_use * CELLRATE))
@@ -64,13 +63,6 @@
 		return 0
 
 	return ..()
-
-/obj/vehicle/train/cargo/trolley/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(open && isWirecutter(W))
-		passenger_allowed = !passenger_allowed
-		user.visible_message("<span class='notice'>[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src].</span>","<span class='notice'>You [passenger_allowed ? "cut" : "mend"] the load limiter cable.</span>")
-	else
-		..()
 
 /obj/vehicle/train/cargo/engine/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/key/cargo_train))
@@ -94,9 +86,6 @@
 		icon_state = initial(icon_state) + "_open"
 	else
 		icon_state = initial(icon_state)
-
-/obj/vehicle/train/cargo/trolley/insert_cell(var/obj/item/weapon/cell/C, var/mob/living/carbon/human/H)
-	return
 
 /obj/vehicle/train/cargo/engine/insert_cell(var/obj/item/weapon/cell/C, var/mob/living/carbon/human/H)
 	..()
@@ -136,6 +125,7 @@
 			verbs += /obj/vehicle/train/cargo/engine/verb/stop_engine
 		else
 			verbs += /obj/vehicle/train/cargo/engine/verb/start_engine
+		update_icon()
 
 /obj/vehicle/train/cargo/engine/turn_off()
 	..()
@@ -148,6 +138,8 @@
 	else
 		verbs += /obj/vehicle/train/cargo/engine/verb/stop_engine
 
+	update_icon()
+
 /obj/vehicle/train/cargo/RunOver(var/mob/living/carbon/human/H)
 	var/list/parts = list(BP_HEAD, BP_CHEST, BP_L_LEG, BP_R_LEG, BP_L_ARM, BP_R_ARM)
 
@@ -155,10 +147,6 @@
 	for(var/i = 0, i < rand(1,5), i++)
 		var/def_zone = pick(parts)
 		H.apply_damage(rand(5,10), BRUTE, def_zone)
-
-/obj/vehicle/train/cargo/trolley/RunOver(var/mob/living/carbon/human/H)
-	..()
-	attack_log += text("\[[time_stamp()]\] <font color='red'>ran over [H.name] ([H.ckey])</font>")
 
 /obj/vehicle/train/cargo/engine/RunOver(var/mob/living/carbon/human/H)
 	..()
@@ -260,21 +248,6 @@
 //-------------------------------------------
 // Loading/unloading procs
 //-------------------------------------------
-/obj/vehicle/train/cargo/trolley/load(var/atom/movable/C)
-	if(ismob(C) && !passenger_allowed)
-		return 0
-	if(!istype(C,/obj/machinery) && !istype(C,/obj/structure/closet) && !istype(C,/obj/structure/largecrate) && !istype(C,/obj/structure/reagent_dispensers) && !istype(C,/obj/structure/ore_box) && !istype(C, /mob/living/carbon/human))
-		return 0
-
-	//if there are any items you don't want to be able to interact with, add them to this check
-	// ~no more shielded, emitter armed death trains
-	if(istype(C, /obj/machinery))
-		load_object(C)
-	else
-		..()
-
-	if(load)
-		return 1
 
 /obj/vehicle/train/cargo/engine/load(var/atom/movable/C)
 	if(!istype(C, /mob/living/carbon/human))
@@ -286,41 +259,6 @@
 //This prevents the object from being interacted with until it has
 // been unloaded. A dummy object is loaded instead so the loading
 // code knows to handle it correctly.
-/obj/vehicle/train/cargo/trolley/proc/load_object(var/atom/movable/C)
-	if(!isturf(C.loc)) //To prevent loading things from someone's inventory, which wouldn't get handled properly.
-		return 0
-	if(load || C.anchored)
-		return 0
-
-	var/datum/vehicle_dummy_load/dummy_load = new()
-	load = dummy_load
-
-	if(!load)
-		return
-	dummy_load.actual_load = C
-	C.forceMove(src)
-
-	if(load_item_visible)
-		C.pixel_x += load_offset_x
-		C.pixel_y += load_offset_y
-		C.plane = plane
-		C.layer = VEHICLE_LOAD_LAYER
-
-		overlays += C
-
-		//we can set these back now since we have already cloned the icon into the overlay
-		C.pixel_x = initial(C.pixel_x)
-		C.pixel_y = initial(C.pixel_y)
-		C.reset_plane_and_layer()
-
-/obj/vehicle/train/cargo/trolley/unload(var/mob/user, var/direction)
-	if(istype(load, /datum/vehicle_dummy_load))
-		var/datum/vehicle_dummy_load/dummy_load = load
-		load = dummy_load.actual_load
-		dummy_load.actual_load = null
-		qdel(dummy_load)
-		overlays.Cut()
-	..()
 
 //-------------------------------------------
 // Latching/unlatching procs
@@ -366,11 +304,3 @@
 		move_delay += config.run_delay 														//base reference speed
 		move_delay *= 1.1																	//makes cargo trains 10% slower than running when not overweight
 
-/obj/vehicle/train/cargo/trolley/update_car(var/train_length, var/active_engines)
-	src.train_length = train_length
-	src.active_engines = active_engines
-
-	if(!lead && !tow)
-		anchored = 0
-	else
-		anchored = 1
