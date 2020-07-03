@@ -467,6 +467,9 @@
 	var/obj/item/weapon/cell/has_cell = get_cell()
 	if(has_cell && has_cell.percent() < 20)
 		signal.data["compression"] = max(0, 80 - has_cell.percent()*3)
+	signal.data["compression"] = max(signal.data["compression"], 60 * Clamp((loc.get_rads() - 10) / 50, 0, 1))
+	to_world("Compression value for this radio message is [signal.data["compression"]]")
+	log_world("Compression value for this radio message is [signal.data["compression"]]")	
 	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
 		R.receive_signal(signal)
 
