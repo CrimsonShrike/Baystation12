@@ -8,6 +8,9 @@
 	var/mob/living/exosuit/owner
 	var/height = 14
 
+/obj/screen/exosuit/Initialize()
+	. = ..()
+
 /obj/screen/exosuit/radio
 	name = "radio"
 	maptext = MECH_UI_STYLE("RADIO")
@@ -192,6 +195,10 @@
 	. = ..()
 	icon_state = "[initial(icon_state)][toggled ? "_enabled" : ""]"
 	maptext = FONT_COLORED(toggled ? COLOR_WHITE : COLOR_GRAY,initial(maptext))
+	if(toggled)
+		filters = filter(type="drop_shadow", color = COLOR_WHITE, size = 1, offset = 0, x = 0, y = 0)
+	else 
+		filters = null
 
 /obj/screen/exosuit/toggle/Click()
 	if(..()) toggled()
@@ -208,6 +215,13 @@
 	maptext_x = 9
 	maptext_y = 13
 	height = 12
+
+/obj/screen/exosuit/toggle/air/on_update_icon()
+	if(toggled)
+		color = COLOR_RED_GRAY
+	else 
+		color = COLOR_WHITE
+	. = ..()
 
 /obj/screen/exosuit/toggle/air/toggled()
 	owner.use_air = ..()
@@ -272,6 +286,8 @@
 	else
 		maptext = MECH_UI_STYLE("CLOSE")
 		maptext_x = 4
+	icon_state = "base"
+	filters = null
 
 // This is basically just a holder for the updates the exosuit does.
 /obj/screen/exosuit/health
@@ -304,7 +320,6 @@
 		return
 	owner.head.active_sensors = ..()
 	to_chat(usr, SPAN_NOTICE("[owner.head.name] advanced sensor mode is [owner.head.active_sensors ? "now" : "no longer" ] active."))
-
 
 #undef BAR_CAP
 #undef MECH_UI_STYLE
