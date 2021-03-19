@@ -71,9 +71,8 @@
 	if(is_broken() || !owner)
 		return
 	var/light_amount = 0 //how much light there is in the place, affects receiving nutrition and healing
-	if(isturf(owner.loc)) //else, there's considered to be no light
-		var/turf/T = owner.loc
-		light_amount = T.get_lumcount() * 10
+	if(loc)
+		light_amount = loc.get_lumcount() * 10
 	owner.set_nutrition(Clamp(owner.nutrition + light_amount, 0, 550))
 	owner.shock_stage -= light_amount
 

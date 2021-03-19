@@ -201,6 +201,12 @@
 	if(.)
 		update_pilots()
 
+/mob/living/exosuit/get_lumcount(minlum, maxlum)
+	if(body && body.transparent_cabin || body.pilot_coverage < 100)
+		return get_turf(src)?.get_lumcount(minlum, maxlum)
+	else
+		return 0.8 //Inside has some glowy lights or something
+
 
 
 

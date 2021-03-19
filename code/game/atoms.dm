@@ -596,3 +596,6 @@ its easier to just keep the beam vertical.
 
 /atom/proc/get_cell()
 	return
+
+/atom/proc/get_lumcount(minlum = 0, maxlum = 1)
+	return 0
