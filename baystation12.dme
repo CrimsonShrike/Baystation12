@@ -1262,6 +1262,7 @@
 #include "code\game\objects\items\weapons\tools\wrench.dm"
 #include "code\game\objects\random\date_based.dm"
 #include "code\game\objects\random\random.dm"
+#include "code\game\objects\reflections\reflections.dm"
 #include "code\game\objects\structures\ai_decoy.dm"
 #include "code\game\objects\structures\banner.dm"
 #include "code\game\objects\structures\barricade.dm"

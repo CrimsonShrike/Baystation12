@@ -26,6 +26,8 @@
 	var/paint_color
 	var/stripe_color
 	var/static/list/wall_stripe_cache = list()
+	has_reflection = TRUE
+	reflection_offset = -31
 
 /turf/simulated/wall/New(newloc, materialtype, rmaterialtype)
 	..(newloc)

@@ -20,6 +20,7 @@
 	use_sound = 'sound/effects/storage/toolbox.ogg'
 	matter = list(MATERIAL_STEEL = 5000)
 	allow_slow_dump = TRUE
+	has_reflection = 1
 
 /obj/item/storage/toolbox/emergency
 	name = "emergency toolbox"

@@ -117,9 +117,21 @@
 	name = "ice"
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "ice"
+	//plane = REFLECTION_PLANE
+	layer = REFLECTIVE_TURF_LAYER
+	appearance_flags = (PIXEL_SCALE)
+	render_target = "reflections"
 
-/turf/simulated/floor/exoplanet/ice/on_update_icon()
-	return
+/turf/simulated/floor/exoplanet/ice/levelupdate()
+	. = ..()
+	layer = initial(layer)
+
+/turf/simulated/floor/exoplanet/Entered(mob/living/carbon/human/H)
+	. = ..()
+
+	filters += filter("type" = "ripple", "size" = 2, "radius" = 0, "falloff" = 1)
+	animate(H.r_plane.filters[1], time = 0, loop = 1, radius = 0, flags=ANIMATION_PARALLEL)
+	animate(time = 3 SECONDS, radius = 48)
 
 //Snow
 /turf/simulated/floor/exoplanet/snow
