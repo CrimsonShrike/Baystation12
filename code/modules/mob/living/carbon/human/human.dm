@@ -12,6 +12,8 @@
 	var/list/grasp_limbs
 	var/step_count
 	var/dream_timer
+	has_reflection = TRUE
+	reflection_offset = -31
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
 

@@ -47,6 +47,9 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 				new_overlays += get_mech_image(null, use_icon_state, 'icons/mecha/mech_weapon_overlays.dmi', null, hardpoint_object.mech_layer )
 	overlays = new_overlays
 
+	if(reflection)
+		reflection.update_appearance(src)
+
 /mob/living/exosuit/proc/update_pilots(var/update_overlays = TRUE)
 	if(update_overlays && LAZYLEN(pilot_overlays))
 		overlays -= pilot_overlays

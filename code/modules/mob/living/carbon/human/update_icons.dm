@@ -527,6 +527,8 @@ var/global/list/damage_icon_parts = list()
 	queue_icon_update()
 	//Hud Stuff
 	update_hud()
+	if(reflection)
+		reflection.update_appearance(src)
 
 /* --------------------------------------- */
 //vvvvvv UPDATE_INV PROCS vvvvvv

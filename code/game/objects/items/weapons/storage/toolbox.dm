@@ -18,6 +18,7 @@
 	attack_verb = list("robusted")
 	use_sound = 'sound/effects/storage/toolbox.ogg'
 	matter = list(MATERIAL_STEEL = 5000)
+	has_reflection = 1
 
 /obj/item/storage/toolbox/emergency
 	name = "emergency toolbox"

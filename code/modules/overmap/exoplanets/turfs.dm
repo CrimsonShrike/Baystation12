@@ -110,10 +110,11 @@
 	name = "ice"
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "ice"
+	layer = REFLECTIVE_TURF_LAYER
 
-/turf/simulated/floor/exoplanet/ice/on_update_icon()
-	return
-
+/turf/simulated/floor/exoplanet/ice/levelupdate()
+	. = ..()
+	layer = initial(layer)
 //Snow
 /turf/simulated/floor/exoplanet/snow
 	name = "snow"

@@ -967,7 +967,7 @@
 // A mob should either use update_icon(), overriding this definition, or use update_icons(), not touching update_icon().
 // It should not use both.
 /mob/on_update_icon()
-	return update_icons()
+	return update_icons() && ..()
 
 /mob/verb/face_direction()
 
