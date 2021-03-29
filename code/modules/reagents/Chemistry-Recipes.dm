@@ -666,6 +666,11 @@
 	..()
 	var/location = get_turf(holder.my_atom)
 
+	if(istype(holder.my_atom, /obj/item/sealant_tank))
+		var/obj/item/sealant_tank/foam = holder.my_atom
+		foam.foam_charges = Clamp(foam.foam_charges + created_volume, 0, foam.max_foam_charges)
+		return
+
 	for(var/mob/M in viewers(5, location))
 		to_chat(M, "<span class='warning'>The solution spews out a metalic foam!</span>")
 
