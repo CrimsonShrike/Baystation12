@@ -403,3 +403,16 @@
 	wall_smooth = SMOOTH_NONE
 	space_smooth = SMOOTH_NONE
 	height = -FLUID_OVER_MOB_HEAD * 2
+
+/decl/flooring/glass
+	name = "glass floor"
+	desc = "See something you like?"
+	icon = 'icons/turf/flooring/glass.dmi'
+	icon_base = "glass"
+	build_type = /obj/item/stack/material/glass
+	build_cost = 2
+	flags = TURF_HAS_CORNERS | TURF_HAS_INNER_CORNERS | TURF_REMOVE_CROWBAR | TURF_CAN_BREAK
+	footstep_type = /decl/footsteps/tiles
+	floor_smooth = SMOOTH_NONE
+	wall_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE

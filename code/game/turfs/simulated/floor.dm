@@ -65,7 +65,7 @@
 	if(flooring)
 		flooring.on_remove()
 		if(flooring.build_type && place_product)
-			new flooring.build_type(src)
+			new flooring.build_type(src, flooring.build_cost)
 		flooring = null
 
 	set_light(0)

@@ -415,3 +415,17 @@
 	icon = 'icons/turf/flooring/pool.dmi'
 	icon_state = "pool"
 	initial_flooring = /decl/flooring/pool
+
+/turf/simulated/floor/glass
+	name = "glass floor"
+	icon = 'icons/turf/flooring/glass.dmi'
+	icon_state = "glass"
+
+	initial_flooring = /decl/flooring/glass
+
+/turf/simulated/glass
+	name = "glass floor"
+	icon = 'icons/turf/flooring/glass.dmi'
+	icon_state = "glass"
+	density = FALSE
+	opacity = FALSE
