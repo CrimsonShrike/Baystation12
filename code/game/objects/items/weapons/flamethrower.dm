@@ -206,3 +206,297 @@
 	igniter.secured = 0
 	status = 1
 	update_icon()
+
+
+/obj/item/gun/flamethrower
+	name = "flammenwerfer"
+	desc = "You are a firestarter!"
+	icon = 'icons/obj/flamethrower.dmi'
+	icon_state = "flamethrowerbase"
+	item_state = "flamethrower_0"
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
+	force = 3.0
+	throwforce = 10.0
+	throw_speed = 1
+	throw_range = 5
+	w_class = ITEM_SIZE_LARGE
+	origin_tech = list(TECH_COMBAT = 1)
+	matter = list(MATERIAL_STEEL = 500)
+	//var/throw_amount = 100
+	var/turf/previousturf = null
+	// var/obj/item/weldingtool/weldtool = null
+	// var/obj/item/device/assembly/igniter/igniter = null
+	var/obj/item/reagent_containers/glass/beaker/beaker
+	fire_sound = ''
+	combustion = TRUE
+	var/static/list/acceptable_fuels = list(/datum/reagent/fuel = 10,
+											/datum/reagent/napalm = 30)
+
+/obj/item/gun/flamethrower/toggle_safety(mob/user)
+	if (user?.is_physically_disabled())
+		return
+
+	safety_state = !safety_state
+	update_icon()
+	if(user)
+		user.visible_message(SPAN_WARNING("[user] [safety_state ? "extinguishes" : "ignites"] the pilot flame of \the [src] ."), SPAN_NOTICE("You [safety_state ? "extinguish" : "ignite"] the pilot flame of \the [src] ."), range = 3)
+		last_safety_check = world.time
+		playsound(src, 'sound/weapons/flipblade.ogg', 15, 1)
+
+/obj/item/gun/flamethrower/consume_next_projectile()
+	if(beaker)
+		return beaker
+	return null
+
+/obj/item/gun/flamethrower/process_projectile(obj/projectile, mob/user, atom/target, target_zone, params)
+	if(!projectile)
+		return 0
+	if(projectile.reagents) //You can get fuels even with impurities, as long as impurities arent main content
+		var/datum/reagent/F = projectile.reagents.get_master_reagent()
+		if(F.type in acceptable_fuels)
+			
+			//BURN BABY BURN! BURN BABY BURN!
+			//Disco inferno
+
+				set waitfor = 0
+				var/turf/curloc = get_turf(user) //In case the target or we are expired.
+				var/turf/targloc = get_turf(target)
+				if (!targloc || !curloc) return //Something has gone wrong...
+
+				var/amount_to_burn = min(10, F.volume)
+				var/potency = acceptable_fuels[F.type]
+				reagents.remove_reagent(F.type, amount_to_burn)
+
+				unleash_flame(target, user, potency, amount_to_burn)
+
+
+
+	play_fire_sound(user, null)
+	return 1
+
+/obj/item/gun/flamethrower/proc/unleash_flame(atom/target, mob/living/user, potency, amount_to_burn)
+	set waitfor = 0
+	if(!potency || !amount_to_burn)
+		return
+
+	// var/datum/reagent/R = current_mag.reagents.reagent_list[1]
+
+	// var/flameshape = R.flameshape
+
+	// R.intensityfire = Clamp(R.intensityfire, current_mag.reagents.min_fire_int, current_mag.reagents.max_fire_int)
+	// R.durationfire = Clamp(R.durationfire, current_mag.reagents.min_fire_dur, current_mag.reagents.max_fire_dur)
+	// R.rangefire = Clamp(R.rangefire, current_mag.reagents.min_fire_rad, current_mag.reagents.max_fire_rad)
+	// var/max_range = R.rangefire
+
+	var/max_range = amount_to_burn / 2
+
+	for(var/turf/target_turf in )
+
+	var/list/turf/turfs = getline(get_turf(user), get_turf(target))
+
+	var/turf/to_fire = turfs[2]
+
+	var/obj/flamer_fire/fire = locate() in to_fire
+	if(fire)
+		qdel(fire)
+
+	//playsound(to_fire, src.get_fire_sound(), 50, TRUE)
+
+	new /obj/flamer_fire(to_fire, user, potency, max_range, target)
+
+
+/obj/flamer_fire
+	name = "fire"
+	desc = "Ouch!"
+	anchored = 1
+	mouse_opacity = 0
+	icon = 'icons/effects/fire.dmi'
+	icon_state = "dynamic_2"
+	layer = BELOW_OBJ_LAYER
+
+	var/firelevel = 12 //Tracks how much "fire" there is. Basically the timer of how long the fire burns
+	var/burnlevel = 10 //Tracks how HOT the fire is. This is basically the heat level of the fire and determines the temperature.
+
+	var/flame_icon = "dynamic"
+	//var/flameshape = FLAMESHAPE_DEFAULT // diagonal square shape
+	//var/weapon_source
+	//var/weapon_source_mob
+	var/turf/target_clicked
+
+	//var/datum/reagent/tied_reagent
+	//var/datum/reagents/tied_reagents
+	//var/datum/callback/to_call
+
+/obj/flamer_fire/Initialize(mapload, var/user, potency, fire_spread_amount = 0, atom/target = null)
+	. = ..()
+
+	color = COLOR_MUZZLE_FLASH
+	//tied_reagent = new R.type() // Can't get deleted this way
+	//tied_reagent.make_alike(R)
+
+	//tied_reagents = obj_reagents
+
+	target_clicked = target
+	//weapon_source_mob = user
+
+	icon_state = "[flame_icon]_2"
+
+	firelevel = potency / 2
+	burnlevel = potency
+
+	START_PROCESSING(SSobj, src)
+
+	var/burn_dam = burnlevel
+
+	if(fire_spread_amount > 0)
+		handle_fire_spread(fire_spread_amount, burn_dam)
+	//Apply fire effects onto everyone in the fire
+
+
+	for(var/mob/living/M in loc) //Deal bonus damage if someone's caught directly in initial stream
+
+
+		M.fire_act(null, burnlevel * 70)
+			
+		//Dont deal extra damage if mob is not on fire
+		if(M.fire_stacks)
+			M.apply_damage(burn_dam, BURN)
+
+		to_chat(M, SPAN_DANGER("You are being burned!"))
+
+		if(weapon_source)
+			M.last_damage_source = weapon_source
+		else
+			M.last_damage_source = initial(name)
+		if(weapon_source_mob)
+			var/mob/SM = weapon_source_mob
+			SM.track_shot_hit(weapon_source)
+
+/obj/flamer_fire/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	. = ..()
+
+/obj/flamer_fire/Crossed(mob/living/M) //Only way to get it to reliable do it when you walk into it.
+	if(!istype(M))
+		return
+
+	var/burn_damage = round(burnlevel*0.5)
+
+
+	
+	M.fire_act(null, burnlevel * 70)
+
+	M.apply_damage(burn_damage, BURN) //This makes fire stronk.
+	to_chat(M, SPAN_DANGER("You are burned!"))
+
+/obj/flamer_fire/proc/on_update_icon()
+	. = ..()
+	if(burnlevel < 15 && flame_icon != "dynamic")
+		color = "#c1c1c1" //make it darker to make show its weaker.
+	switch(firelevel)	
+		if(1 to 9)
+			icon_state = "[flame_icon]_1"
+			set_light(0.5, 1, 3, color)
+		if(10 to 25)
+			icon_state = "[flame_icon]_2"
+			set_light(0.7, 2, 5, color)
+		if(25 to INFINITY) //Change the icons and luminosity based on the fire's intensity
+			icon_state = "[flame_icon]_3"
+			set_light(1, 2, 7, color)
+
+/obj/flamer_fire/process()
+	var/turf/T = loc
+	firelevel = max(0, firelevel)
+	if(!istype(T)) //Is it a valid turf? Has to be on a floor
+		qdel(src)
+		return
+
+	update_icon()
+
+	if(!firelevel)
+		qdel(src)
+		return
+
+	var/j = 0
+	for(var/i in loc)
+		if(++j >= 11) break
+		if(isliving(i))
+			var/mob/living/I = i
+			// If I stand in the fire I deserve all of this. Also Napalm stacks quickly.
+			M.fire_act(null, burnlevel * 70)
+			I.show_message(text(SPAN_WARNING("You are burned!")), 1)
+		if(isobj(i))
+			var/obj/O = i
+			O.fire_act(null, burnlevel * 70)
+
+	//This has been made a simple loop, for the most part flamer_fire_act() just does return, but for specific items it'll cause other effects.
+	firelevel -= 2 //reduce the intensity by 2 per tick
+	return
+
+/proc/fire_spread_recur(var/turf/target, var/source, var/source_mob, remaining_distance, direction, fire_lvl, burn_lvl, f_color)
+	var/direction_angle = dir2angle(direction)
+	var/obj/flamer_fire/foundflame = locate() in target
+	if(!foundflame)
+		var/datum/reagent/R = new()
+		R.intensityfire = burn_lvl
+		R.durationfire = fire_lvl
+
+		R.burncolor = f_color
+		new/obj/flamer_fire(target, source, source_mob, R)
+
+	for(var/spread_direction in alldirs)
+
+		var/spread_power = remaining_distance
+
+		var/spread_direction_angle = dir2angle(spread_direction)
+
+		var/angle = 180 - abs( abs( direction_angle - spread_direction_angle ) - 180 ) // the angle difference between the spread direction and initial direction
+
+		switch(angle) //this reduces power when the explosion is going around corners
+			if (0)
+				//no change
+			if (45)
+				spread_power *= 0.75
+			else //turns out angles greater than 90 degrees almost never happen. This bit also prevents trying to spread backwards
+				continue
+
+		switch(spread_direction)
+			if(NORTH,SOUTH,EAST,WEST)
+				spread_power -= 1
+			else
+				spread_power -= 1.414 //diagonal spreading
+
+		if (spread_power < 1)
+			continue
+
+		var/turf/T = get_step(target, spread_direction)
+
+		if(!T) //prevents trying to spread into "null" (edge of the map?)
+			continue
+
+		if(T.density)
+			continue
+
+		spawn(0)
+			fire_spread_recur(T, source, source_mob, spread_power, spread_direction, fire_lvl, burn_lvl, f_color)
+
+/proc/fire_spread(var/turf/target, var/source, var/source_mob, range, fire_lvl, burn_lvl, f_color)
+	var/datum/reagent/R = new()
+	R.intensityfire = burn_lvl
+	R.durationfire = fire_lvl
+
+	R.burncolor = f_color
+
+	new/obj/flamer_fire(target, source, source_mob, R)
+	for(var/direction in alldirs)
+		var/spread_power = range
+		switch(direction)
+			if(NORTH,SOUTH,EAST,WEST)
+				spread_power -= 1
+			else
+				spread_power -= 1.414 //diagonal spreading
+		var/turf/T = get_step(target, direction)
+		fire_spread_recur(T, source, source_mob, spread_power, direction, fire_lvl, burn_lvl, f_color)
+
+
+	
