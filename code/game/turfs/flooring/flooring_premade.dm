@@ -422,3 +422,11 @@
 	icon = 'icons/turf/flooring/forcefield.dmi'
 	icon_state = "floor"
 	initial_flooring = /decl/flooring/forcefield
+
+/turf/simulated/floor/glass
+	icon = 'icons/turf/flooring/glassfloor.dmi'
+	icon_state = "glassfloor"
+	initial_flooring = /decl/flooring/glass
+
+/turf/simulated/floor/glass/boro
+	initial_flooring = /decl/flooring/glass/boro

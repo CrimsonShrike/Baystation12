@@ -344,7 +344,7 @@ TORCH_ESCAPE_POD(17)
 	name = "Hangar"
 	landmark_tag = "nav_cargo_station"
 	base_area = /area/quartermaster/hangar
-	base_turf = /turf/simulated/floor/plating
+	base_turf = /turf/simulated/floor/forcefield
 
 /datum/shuttle/autodock/overmap/exploration_shuttle
 	name = "Charon"
@@ -363,7 +363,7 @@ TORCH_ESCAPE_POD(17)
 	name = "Charon Hangar"
 	landmark_tag = "nav_hangar_charon"
 	base_area = /area/quartermaster/hangar
-	base_turf = /turf/simulated/floor/plating
+	base_turf = /turf/simulated/floor/forcefield
 
 /obj/shuttle_landmark/torch/deck1/exploration_shuttle
 	name = "Space near Forth Deck"
@@ -409,7 +409,7 @@ TORCH_ESCAPE_POD(17)
 	name = "Guppy Hangar"
 	landmark_tag = "nav_hangar_guppy"
 	base_area = /area/quartermaster/hangar
-	base_turf = /turf/simulated/floor/plating
+	base_turf = /turf/simulated/floor/forcefield
 
 /obj/shuttle_landmark/torch/deck1/guppy
 	name = "Space near Forth Deck"
