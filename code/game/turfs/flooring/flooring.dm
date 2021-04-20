@@ -49,6 +49,8 @@
 
 	var/height = 0
 
+	var/z_flags //same z flags used for turfs, i.e ZMIMIC_DEFAULT etc
+
 /decl/flooring/proc/on_remove()
 	return
 
@@ -403,3 +405,21 @@
 	wall_smooth = SMOOTH_NONE
 	space_smooth = SMOOTH_NONE
 	height = -FLUID_OVER_MOB_HEAD * 2
+
+/decl/flooring/glass
+	name = "glass flooring"
+	desc = "A window to the world outside. Or the world beneath your feet, rather."
+	icon = 'icons/turf/flooring/glassfloor.dmi'
+	icon_base = "glassfloor"
+	build_type = /obj/item/stack/material/glass/reinforced
+	damage_temperature = T100C
+	flags = TURF_REMOVE_CROWBAR | TURF_ACID_IMMUNE
+	can_engrave = FALSE
+	color = GLASS_COLOR
+	z_flags = ZM_MIMIC_BELOW
+
+/decl/flooring/glass/boro
+	name = "borosilicate glass flooring"
+	build_type = /obj/item/stack/material/glass/phoronglass
+	color = GLASS_COLOR_PHORON
+	damage_temperature = T0C + 4000

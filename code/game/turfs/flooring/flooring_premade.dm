@@ -415,3 +415,11 @@
 	icon = 'icons/turf/flooring/pool.dmi'
 	icon_state = "pool"
 	initial_flooring = /decl/flooring/pool
+
+/turf/simulated/floor/glass
+	icon = 'icons/turf/flooring/glassfloor.dmi'
+	icon_state = "glassfloor"
+	initial_flooring = /decl/flooring/glass
+
+/turf/simulated/floor/glass/boro
+	initial_flooring = /decl/flooring/glass/boro
