@@ -174,7 +174,12 @@ What is the naming convention for planes or layers?
 	#define BEAM_PROJECTILE_LAYER  2
 	#define SUPERMATTER_WALL_LAYER 3
 
-#define FULLSCREEN_PLANE                4 // for fullscreen overlays that do not cover the hud.
+/// This plane masks out lighting to create an "emissive" effect, ie for glowing lights in otherwise dark areas.
+#define EMISSIVE_PLANE 4
+/// The render target used by the emissive layer.
+#define EMISSIVE_RENDER_TARGET "*EMISSIVE_PLANE"
+
+#define FULLSCREEN_PLANE                5 // for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER    0
 	#define DAMAGE_LAYER        1
@@ -182,7 +187,7 @@ What is the naming convention for planes or layers?
 	#define BLIND_LAYER         3
 	#define CRIT_LAYER          4
 
-#define HUD_PLANE                    5
+#define HUD_PLANE                    6
 	#define UNDER_HUD_LAYER              0
 	#define HUD_BASE_LAYER               2
 	#define HUD_ITEM_LAYER               3

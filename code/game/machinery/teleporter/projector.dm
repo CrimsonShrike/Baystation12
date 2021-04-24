@@ -7,6 +7,8 @@
 	anchored = TRUE
 	idle_power_usage = 10
 	active_power_usage = 2000
+	atom_flags = ATOM_FLAG_CLIMBABLE | ATOM_FLAG_NO_TEMP_CHANGE
+		
 
 	var/obj/machinery/computer/teleporter/computer
 
@@ -49,14 +51,8 @@
 	overlays.Cut()
 	if (computer?.active)
 		update_use_power(POWER_USE_ACTIVE)
-		var/image/I = image(icon, src, "[initial(icon_state)]_active_overlay")
-		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
-		I.layer = ABOVE_LIGHTING_LAYER
-		overlays += I
+		overlays += emissive_appearance(icon, "[initial(icon_state)]_active_overlay")
 	else
 		update_use_power(POWER_USE_IDLE)
 		if (operable())
-			var/image/I = image(icon, src, "[initial(icon_state)]_idle_overlay")
-			I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
-			I.layer = ABOVE_LIGHTING_LAYER
-			overlays += I
+			overlays += emissive_appearance(icon, "[initial(icon_state)]_idle_overlay")

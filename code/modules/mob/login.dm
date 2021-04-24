@@ -89,8 +89,10 @@
 
 	l_plane = new()
 	l_general = new()
+	l_emissive = new()
 	client.screen += l_plane
 	client.screen += l_general
+	client.screen += l_emissive
 
 	refresh_client_images()
 	reload_fullscreen() // Reload any fullscreen overlays this mob has.

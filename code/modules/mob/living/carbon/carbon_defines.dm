@@ -39,3 +39,5 @@
 	var/stasis_value
 
 	var/player_triggered_sleeping = 0
+
+	blocks_emissive = EMISSIVE_BLOCK_UNIQUE
