@@ -1,3 +1,18 @@
+#define BIOME_RANDOM_SQUARE_DRIFT 2
+
+#define BIOME_LOW_HEAT "low_heat"
+#define BIOME_LOWMEDIUM_HEAT "lowmedium_heat"
+#define BIOME_HIGHMEDIUM_HEAT "highmedium_heat"
+#define BIOME_HIGH_HEAT "high_heat"
+
+#define BIOME_LOW_HUMIDITY "low_humidity"
+#define BIOME_LOWMEDIUM_HUMIDITY "lowmedium_humidity"
+#define BIOME_HIGHMEDIUM_HUMIDITY "highmedium_humidity"
+#define BIOME_HIGH_HUMIDITY "high_humidity"
+
+
+
+
 GLOBAL_VAR(planet_repopulation_disabled)
 
 /obj/effect/overmap/visitable/sector/exoplanet
@@ -45,7 +60,7 @@ GLOBAL_VAR(planet_repopulation_disabled)
 
 	var/list/possible_themes = list(
 		/datum/exoplanet_theme = 45,
-		/datum/exoplanet_theme/mountains = 65,
+		/datum/exoplanet_theme/caves = 65,
 		/datum/exoplanet_theme/radiation_bombing = 10,
 		/datum/exoplanet_theme/ruined_city = 5,
 		/datum/exoplanet_theme/robotic_guardians = 10
@@ -69,6 +84,17 @@ GLOBAL_VAR(planet_repopulation_disabled)
 	)
 	var/habitability_class
 
+	var/list/plantcolors = list("RANDOM")
+	var/list/grass_cache
+	var/list/possible_biomes = list()
+
+	//treshold 0-1 . Higher means more abrupt mountains
+	var/height_treshold = 0.9
+	//This allows to force lower half of map to be pure mountains, or to ensure there are large flat areas above a certain value
+	//Experiment
+	var/min_height = 0 //Lowest possible (normalized) height
+	var/max_height = 1 //Highest possible (normalized) height
+
 /obj/effect/overmap/visitable/sector/exoplanet/proc/generate_habitability()
 	if (isnum(habitability_distribution))
 		habitability_class = habitability_distribution
@@ -89,8 +115,16 @@ GLOBAL_VAR(planet_repopulation_disabled)
 	GLOB.using_map.area_purity_test_exempt_areas += planetary_area.type
 	planetary_area.name = "Surface of [planet_name]"
 
-	INCREMENT_WORLD_Z_SIZE
+	var/height = 6
+	for(var/i = 1 to height)
+		INCREMENT_WORLD_Z_SIZE
+
 	forceMove(locate(1,1,world.maxz))
+
+	for(var/i = (loc.z - height + 1) to (loc.z-1))
+		if (z_levels.len <i)
+			z_levels.len = i
+		z_levels[i] = TRUE
 
 	if (LAZYLEN(possible_themes))
 		var/datum/exoplanet_theme/T = pick(possible_themes)
@@ -183,7 +217,41 @@ GLOBAL_VAR(planet_repopulation_disabled)
 	if (daycolumn > maxx)
 		daycolumn = 0
 
+/obj/effect/overmap/visitable/sector/exoplanet/proc/spawn_fauna(turf/T, var/mega)
+	if (prob(mega))
+		new /obj/effect/landmark/exoplanet_spawn/megafauna(T)
+	else
+		new /obj/effect/landmark/exoplanet_spawn(T)
+
+/obj/effect/overmap/visitable/sector/exoplanet/proc/get_grass_overlay()
+	var/grass_num = "[rand(1,6)]"
+	if (!LAZYACCESS(grass_cache, grass_num))
+		var/color = pick(plantcolors)
+		if (color == "RANDOM")
+			color = get_random_colour(0,75,190)
+		var/image/grass = overlay_image('icons/obj/flora/greygrass.dmi', "grass_[grass_num]", color, RESET_COLOR)
+		grass.underlays += overlay_image('icons/obj/flora/greygrass.dmi', "grass_[grass_num]_shadow", null, RESET_COLOR)
+		LAZYSET(grass_cache, grass_num, grass)
+	return grass_cache[grass_num]
+
+/obj/effect/overmap/visitable/sector/exoplanet/proc/spawn_flora(turf/T, big)
+	if (big)
+		new /obj/effect/landmark/exoplanet_spawn/large_plant(T)
+		for(var/turf/neighbor in RANGE_TURFS(T, 1))
+			spawn_grass(neighbor)
+	else
+		new /obj/effect/landmark/exoplanet_spawn/plant(T)
+		spawn_grass(T)
+
+/obj/effect/overmap/visitable/sector/exoplanet/proc/spawn_grass(turf/T)
+	if (istype(T, /turf/simulated/floor/exoplanet/water/shallow))
+		return
+	if (locate(/obj/effect/floor_decal) in T)
+		return
+	new /obj/effect/floor_decal(T, null, null, get_grass_overlay())
+
 /obj/effect/overmap/visitable/sector/exoplanet/proc/generate_map()
+
 	var/list/grasscolors = plant_colors.Copy()
 	grasscolors -= "RANDOM"
 	if (length(grasscolors))
@@ -191,20 +259,129 @@ GLOBAL_VAR(planet_repopulation_disabled)
 
 	for (var/datum/exoplanet_theme/T in themes)
 		T.before_map_generation(src)
-	for (var/zlevel in map_z)
+
+	var/height_seed = rand(0, 10000)
+	var/humidity_seed = rand(0, 10000)
+	var/heat_seed = rand(0, 10000)
+	//Generate a perlin noise map
+	var/Noise/height = new
+	var/Noise/heat = new
+	var/Noise/humidity = new
+
+	heat.setSeed(heat_seed)
+	humidity.setSeed(humidity_seed)
+	height.setSeed(height_seed)
+
+	//Now this is pod racing
+	plantcolors = list("#2f573e","#24574e","#6e9280","#9eab88","#868b58", "#84be7c", "RANDOM")
+	var/padding = TRANSITIONEDGE
+	for (var/j = map_z.len; j > 0; j--) //Is more sensible to do it bottom to top
+		var/zlevel = map_z[j]
+		var/relative_z = map_z.len - j
+
+		GLOB.using_map.base_turf_by_z[num2text(zlevel)] = /turf/simulated/floor/exoplanet/sand/dirt
+
 		var/list/edges
 		edges += block(locate(1, 1, zlevel), locate(TRANSITIONEDGE, maxy, zlevel))
 		edges |= block(locate(maxx-TRANSITIONEDGE, 1, zlevel),locate(maxx, maxy, zlevel))
 		edges |= block(locate(1, 1, zlevel), locate(maxx, TRANSITIONEDGE, zlevel))
 		edges |= block(locate(1, maxy-TRANSITIONEDGE, zlevel),locate(maxx, maxy, zlevel))
+
 		for (var/turf/T in edges)
 			T.ChangeTurf(/turf/simulated/planet_edge)
-		var/padding = TRANSITIONEDGE
-		for (var/map_type in map_generators)
-			if (ispath(map_type, /datum/random_map/noise/exoplanet))
-				new map_type(null,padding,padding,zlevel,maxx-padding,maxy-padding,0,1,1,planetary_area, plant_colors)
-			else
-				new map_type(null,1,1,zlevel,maxx,maxy,0,1,1,planetary_area)
+		
+		var/zoom = 70 //Higher zoom, slower transitions. Increase it if things look too funky
+
+		var/list/height_cache = list()
+		height_cache.len = (maxx * maxy)
+
+		for(var/x in padding to (maxx - padding))
+			for(var/y in padding to (maxy - padding))
+				var/turf/T = locate(x,y,zlevel)
+
+				ChangeArea(T, planetary_area)
+
+				//Coordinate drift
+				// var/drift_x = (x + rand(-BIOME_RANDOM_SQUARE_DRIFT, BIOME_RANDOM_SQUARE_DRIFT)) / zoom
+				// var/drift_y = (y + rand(-BIOME_RANDOM_SQUARE_DRIFT, BIOME_RANDOM_SQUARE_DRIFT)) / zoom
+				var/drift_x = x / zoom
+				var/drift_y = y / zoom
+				
+				var/he = height.noise2(drift_x, drift_y)
+				he = height.scale(he, 0, 1)
+				//At this point clamp it to the maximum and minimum
+				he = clamp(he, min_height, max_height)
+				var/scaled_height = he * (map_z.len - 1) //Z level scale
+
+				height_cache[x * maxy + y] = he
+
+				var/hum = humidity.noise2(drift_x , drift_y)
+				hum = humidity.scale(hum, 0, 1)
+				var/hea = heat.noise2(drift_x , drift_y)
+				hea = heat.scale(hea, 0, 1)
+
+				//No floors above non dense turfs, unless it is a cave
+				if(HasBelow(zlevel) && !GetBelow(T)?.density && !istype(GetBelow(T), /turf/simulated/floor/exoplanet/cave))
+					T.ChangeTurf(/turf/simulated/open)
+				else if(scaled_height >= (relative_z + height_treshold))
+					T.ChangeTurf(/turf/simulated/mineral)
+				else
+					var/heat_level = BIOME_LOW_HEAT
+					var/humidity_level = BIOME_LOW_HUMIDITY
+					switch(hea)
+						if(0 to 0.25)
+							heat_level = BIOME_LOW_HEAT
+						if(0.25 to 0.5)
+							heat_level = BIOME_LOWMEDIUM_HEAT
+						if(0.5 to 0.75)
+							heat_level = BIOME_HIGHMEDIUM_HEAT
+						if(0.75 to 1)
+							heat_level = BIOME_HIGH_HEAT
+
+					switch(hum)
+						if(0 to 0.25)
+							humidity_level = BIOME_LOW_HUMIDITY
+						if(0.25 to 0.5)
+							humidity_level = BIOME_LOWMEDIUM_HUMIDITY
+						if(0.5 to 0.75)
+							humidity_level = BIOME_HIGHMEDIUM_HUMIDITY
+						if(0.75 to 1)
+							humidity_level = BIOME_HIGH_HUMIDITY
+					
+					var/decl/biome/B = decls_repository.get_decl(possible_biomes[heat_level][humidity_level])
+					B.generate_turf(T, src)
+
+		
+		//Run generators (caves, ore)
+		for(var/map_type in map_generators)
+			new map_type(null, 1, 1, zlevel, maxx, maxy, 0, 1, 1, planetary_area)
+
+		//Orphan smoothing pass
+		for(var/x in (padding + 1) to (maxx - padding - 1))
+			for(var/y in (padding + 1) to (maxy - padding - 1))
+				var/turf/T = locate(x,y,zlevel)
+				var/same = FALSE
+				for(var/turf/t in (trange(1,T) - T))
+					if(istype(T, t.type))
+						same = TRUE
+						break
+				if(!same)
+					T.ChangeTurf(pick((trange(1,T) - T)).type)
+
+				if(!HasAbove(zlevel))
+					continue
+				//Ramp pass
+				if(!T.density)
+					for(var/dir in GLOB.cardinal)
+						var/turf/t = get_step(T, dir)
+						//TODO REVISIT THIS
+						if(t.density && abs(height_cache[x * maxy + y] - height_cache[t.x * maxy + t.y]) <= 0.05)
+							var/obj/structure/stairs/dirt/S = new(T)
+							S.set_dir(dir)
+							S.color = t.color
+							S.update_connections(1)
+							S.update_icon()
+							break
 
 /obj/effect/overmap/visitable/sector/exoplanet/proc/generate_features()
 	spawned_features = seedRuins(map_z, features_budget, possible_features, /area/exoplanet, maxx, maxy)

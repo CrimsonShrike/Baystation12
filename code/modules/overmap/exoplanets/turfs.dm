@@ -142,6 +142,14 @@
 	color = "#799c4b"
 	footstep_type = /decl/footsteps/grass
 
+/turf/simulated/floor/exoplanet/grass/dark/Initialize()
+	. = ..()
+	color = "#23330d"
+
+/turf/simulated/floor/exoplanet/sand/dirt/Initialize()
+	. = ..()
+	color = COLOR_BEASTY_BROWN
+
 /turf/simulated/floor/exoplanet/grass/Initialize()
 	. = ..()
 	if(GLOB.using_map.use_overmap)
@@ -270,3 +278,18 @@
 			if(L.pulling)
 				var/atom/movable/AM = L.pulling
 				AM.forceMove(T)
+
+
+//caves
+
+
+//Change this, I think nebula reworked mineability for planets so copy that
+/turf/simulated/floor/exoplanet/cave
+	name = "cave floor"
+	icon = 'icons/turf/flooring/asteroid.dmi'
+	icon_state = "asteroid"
+	base_name = "sand"
+	base_desc = "Gritty and unpleasant."
+	base_icon = 'icons/turf/flooring/asteroid.dmi'
+	base_icon_state = "asteroid"
+	footstep_type = /decl/footsteps/asteroid

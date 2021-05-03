@@ -5,7 +5,7 @@
 	planetary_area = /area/exoplanet/desert
 	rock_colors = list(COLOR_BEIGE, COLOR_PALE_YELLOW, COLOR_GRAY80, COLOR_BROWN)
 	plant_colors = list("#efdd6f","#7b4a12","#e49135","#ba6222","#5c755e","#420d22")
-	map_generators = list(/datum/random_map/noise/exoplanet/desert, /datum/random_map/noise/ore/rich)
+	map_generators = list(/datum/random_map/noise/ore/rich)
 	surface_color = "#d6cca4"
 	water_color = null
 	habitability_distribution = list(HABITABILITY_IDEAL = 30, HABITABILITY_OKAY = 50, HABITABILITY_BAD = 10)
@@ -42,19 +42,19 @@
 		S.set_trait(TRAIT_CARNIVOROUS,2)
 	S.set_trait(TRAIT_SPREAD,0)
 
-/datum/random_map/noise/exoplanet/desert
-	descriptor = "desert exoplanet"
-	smoothing_iterations = 4
-	land_type = /turf/simulated/floor/exoplanet/desert
+// /datum/random_map/noise/exoplanet/desert
+// 	descriptor = "desert exoplanet"
+// 	smoothing_iterations = 4
+// 	land_type = /turf/simulated/floor/exoplanet/desert
 
-	flora_prob = 5
-	large_flora_prob = 0
+// 	flora_prob = 5
+// 	large_flora_prob = 0
 
-/datum/random_map/noise/exoplanet/desert/get_additional_spawns(var/value, var/turf/T)
-	..()
-	var/v = noise2value(value)
-	if(v > 6 && prob(2))
-		new/obj/effect/quicksand(T)
+// /datum/random_map/noise/exoplanet/desert/get_additional_spawns(var/value, var/turf/T)
+// 	..()
+// 	var/v = noise2value(value)
+// 	if(v > 6 && prob(2))
+// 		new/obj/effect/quicksand(T)
 
 /area/exoplanet/desert
 	ambience = list('sound/effects/wind/desert0.ogg','sound/effects/wind/desert1.ogg','sound/effects/wind/desert2.ogg','sound/effects/wind/desert3.ogg','sound/effects/wind/desert4.ogg','sound/effects/wind/desert5.ogg')

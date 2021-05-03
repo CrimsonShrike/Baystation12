@@ -6,7 +6,7 @@
 	rock_colors = list(COLOR_DARK_GRAY)
 	plant_colors = list("#a23c05","#3f1f0d","#662929","#ba6222","#7a5b3a","#120309")
 	possible_themes = list()
-	map_generators = list(/datum/random_map/automata/cave_system/mountains/volcanic, /datum/random_map/noise/exoplanet/volcanic, /datum/random_map/noise/ore/filthy_rich)
+	map_generators = list(/datum/random_map/automata/cave_system/exoplanet/volcanic, /datum/random_map/noise/ore/filthy_rich)
 	ruin_tags_blacklist = RUIN_HABITAT|RUIN_WATER
 	surface_color = "#261e19"
 	water_color = "#c74d00"
@@ -34,34 +34,34 @@
 	..()
 	A.heat_damage_per_tick = 0 //animals not hot, no burning in lava
 
-/datum/random_map/noise/exoplanet/volcanic
-	descriptor = "volcanic exoplanet"
-	smoothing_iterations = 5
-	land_type = /turf/simulated/floor/exoplanet/volcanic
-	water_type = /turf/simulated/floor/exoplanet/lava
-	water_level_min = 5
-	water_level_max = 6
+// /datum/random_map/noise/exoplanet/volcanic
+// 	descriptor = "volcanic exoplanet"
+// 	smoothing_iterations = 5
+// 	land_type = /turf/simulated/floor/exoplanet/volcanic
+// 	water_type = /turf/simulated/floor/exoplanet/lava
+// 	water_level_min = 5
+// 	water_level_max = 6
 
-	fauna_prob = 1
-	flora_prob = 3
-	large_flora_prob = 0
+// 	fauna_prob = 1
+// 	flora_prob = 3
+// 	large_flora_prob = 0
 
-//Squashing most of 1 tile lava puddles
-/datum/random_map/noise/exoplanet/volcanic/cleanup()
-	for(var/x = 1, x <= limit_x, x++)
-		for(var/y = 1, y <= limit_y, y++)
-			var/current_cell = get_map_cell(x,y)
-			if(noise2value(map[current_cell]) < water_level)
-				continue
-			var/frendos
-			for(var/dx in list(-1,0,1))
-				for(var/dy in list(-1,0,1))
-					var/tmp_cell = get_map_cell(x+dx,y+dy)
-					if(tmp_cell && tmp_cell != current_cell && noise2value(map[tmp_cell]) >= water_level)
-						frendos = 1
-						break
-			if(!frendos)
-				map[current_cell] = 1
+// //Squashing most of 1 tile lava puddles
+// /datum/random_map/noise/exoplanet/volcanic/cleanup()
+// 	for(var/x = 1, x <= limit_x, x++)
+// 		for(var/y = 1, y <= limit_y, y++)
+// 			var/current_cell = get_map_cell(x,y)
+// 			if(noise2value(map[current_cell]) < water_level)
+// 				continue
+// 			var/frendos
+// 			for(var/dx in list(-1,0,1))
+// 				for(var/dy in list(-1,0,1))
+// 					var/tmp_cell = get_map_cell(x+dx,y+dy)
+// 					if(tmp_cell && tmp_cell != current_cell && noise2value(map[tmp_cell]) >= water_level)
+// 						frendos = 1
+// 						break
+// 			if(!frendos)
+// 				map[current_cell] = 1
 
 /area/exoplanet/volcanic
 	forced_ambience = list('sound/ambience/magma.ogg')
@@ -73,14 +73,12 @@
 	icon_state = "cold"
 	dirt_color = COLOR_GRAY20
 
-/datum/random_map/automata/cave_system/mountains/volcanic
-	iterations = 2
-	descriptor = "space volcanic mountains"
-	wall_type =  /turf/simulated/mineral/volcanic
+/datum/random_map/automata/cave_system/exoplanet/volcanic
+	descriptor = "space volcanic vents"
 	mineral_turf =  /turf/simulated/mineral/random/volcanic
 	rock_color = COLOR_DARK_GRAY
 
-/datum/random_map/automata/cave_system/mountains/volcanic/get_additional_spawns(value, var/turf/simulated/mineral/T)
+/datum/random_map/automata/cave_system/exoplanet/volcanic/get_additional_spawns(value, var/turf/simulated/mineral/T)
 	..()
 	if(use_area && istype(T))
 		T.mined_turf = prob(90) ? use_area.base_turf : /turf/simulated/floor/exoplanet/lava

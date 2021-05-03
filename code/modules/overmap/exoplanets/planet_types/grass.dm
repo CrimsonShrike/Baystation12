@@ -5,7 +5,6 @@
 	planetary_area = /area/exoplanet/grass
 	rock_colors = list(COLOR_ASTEROID_ROCK, COLOR_GRAY80, COLOR_BROWN)
 	plant_colors = list("#0e1e14","#1a3e38","#5a7467","#9eab88","#6e7248", "RANDOM")
-	map_generators = list(/datum/random_map/noise/exoplanet/grass)
 	habitability_distribution = list(HABITABILITY_IDEAL = 70, HABITABILITY_OKAY = 20, HABITABILITY_BAD = 5)
 	has_trees = TRUE
 	flora_diversity = 7
@@ -60,15 +59,15 @@
 		L.client.ambience_playing = TRUE
 		L.playsound_local(get_turf(L),sound('sound/ambience/jungle.ogg', repeat = 1, wait = 0, volume = 25, channel = GLOB.ambience_sound_channel))
 
-/datum/random_map/noise/exoplanet/grass
-	descriptor = "grass exoplanet"
-	smoothing_iterations = 2
-	land_type = /turf/simulated/floor/exoplanet/grass
-	water_type = /turf/simulated/floor/exoplanet/water/shallow
+// /datum/random_map/noise/exoplanet/grass
+// 	descriptor = "grass exoplanet"
+// 	smoothing_iterations = 2
+// 	land_type = /turf/simulated/floor/exoplanet/grass
+// 	water_type = /turf/simulated/floor/exoplanet/water/shallow
 
-	flora_prob = 10
-	grass_prob = 50
-	large_flora_prob = 30
+// 	flora_prob = 10
+// 	grass_prob = 50
+// 	large_flora_prob = 30
 
 /obj/effect/overmap/visitable/sector/exoplanet/grass/terraformed
 	name = "life seeded exoplanet"
