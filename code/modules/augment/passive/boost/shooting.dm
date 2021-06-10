@@ -4,10 +4,12 @@
 	buffs = list(SKILL_WEAPONS = 1)
 	injury_debuffs = list(SKILL_WEAPONS = -1)
 
-/obj/item/organ/internal/augment/boost/reflex/buff()
+	icon_path = 'icons/mob/human_races/augment/cyborg_face.dmi'
+
+/obj/item/organ/internal/augment/boost/shooting/buff()
 	if((. = ..()))
 		to_chat(owner, SPAN_NOTICE("Notice: AIM-4 finished reboot."))
 
-/obj/item/organ/internal/augment/boost/reflex/debuff()
+/obj/item/organ/internal/augment/boost/shooting/debuff()
 	if((. = ..()))
 		to_chat(owner, SPAN_WARNING("Catastrophic damage detected: AIM-4 shutting down."))

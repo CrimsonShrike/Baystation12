@@ -11,6 +11,10 @@
 	var/known = TRUE // Whether or not this augment displays on body scanners
 	var/discoverable = FALSE // Whether or not this augment will be discovered when checking a body part for wounds
 
+	//If we render on mob, define a path
+	var/icon_path = null
+	var/icon/mob_icon = null
+
 /obj/item/organ/internal/augment/Initialize()
 	. = ..()
 	organ_tag = pick(allowed_organs)
@@ -19,7 +23,9 @@
 //General expectation is onInstall and onRemoved are overwritten to add effects to augmentee
 /obj/item/organ/internal/augment/replaced(var/mob/living/carbon/human/target)
 	if(..() && istype(owner))
+		update_icon()
 		onInstall()
+		target.update_body(1)
 
 /obj/item/organ/internal/augment/proc/onInstall()
 	return
@@ -73,6 +79,18 @@
 		parent_organ = BP_CHEST
 		descriptor = "chest"
 
+	update_icon()
+
+/obj/item/organ/internal/augment/on_update_icon()
+	. = ..()
+	update_mob_icon()
+
+/obj/item/organ/internal/augment/proc/update_mob_icon()
+	//Updates overlay for mob if it exists
+	if(icon_path && !mob_icon)
+		mob_icon = new/icon(icon_path, "[parent_organ]")
+
+	//Add more logic if you need species specific or damage state based stuff
 
 /obj/item/organ/internal/augment/examine(mob/user, distance)
 	. = ..()

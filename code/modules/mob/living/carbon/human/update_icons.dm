@@ -357,6 +357,14 @@ var/global/list/damage_icon_parts = list()
 		else
 			icon_key += "1"
 
+	for(var/obj/item/organ/internal/augment/Aug in (internal_organs))
+		visible_message("Ye, we got augs")
+
+		if(istype(Aug) && Aug.mob_icon)
+			//This augment renders, add key
+			icon_key += "[Aug.name]-[Aug.parent_organ]"
+			visible_message("Ye, they got icons")
+
 	icon_key = "[icon_key][husk ? 1 : 0][fat ? 1 : 0][hulk ? 1 : 0][skeleton ? 1 : 0]"
 
 	var/icon/base_icon
@@ -389,6 +397,35 @@ var/global/list/damage_icon_parts = list()
 				base_icon.Blend(temp, ICON_UNDERLAY)
 			else
 				base_icon.Blend(temp, ICON_OVERLAY)
+
+		//Internal organs could possibly render too. Augments primarily.
+		for(var/obj/item/organ/internal/augment/Aug in (internal_organs))
+			var/obj/item/organ/external/part = get_organ(Aug.parent_organ)
+			Aug.update_icon()
+			var/icon/temp = Aug.mob_icon
+			visible_message("Ye, we adding em, [temp] [part]")
+			if(istype(part) && istype(temp))
+				visible_message("Ye, we added em")
+				//That part makes left and right legs drawn topmost and lowermost when human looks WEST or EAST
+				//And no change in rendering for other parts (they icon_position is 0, so goes to 'else' part)
+				if(part.icon_position & (LEFT | RIGHT))
+					var/icon/temp2 = new('icons/mob/human.dmi',"blank")
+					temp2.Insert(new/icon(temp,dir=NORTH),dir=NORTH)
+					temp2.Insert(new/icon(temp,dir=SOUTH),dir=SOUTH)
+					if(!(part.icon_position & LEFT))
+						temp2.Insert(new/icon(temp,dir=EAST),dir=EAST)
+					if(!(part.icon_position & RIGHT))
+						temp2.Insert(new/icon(temp,dir=WEST),dir=WEST)
+					base_icon.Blend(temp2, ICON_OVERLAY)
+					if(part.icon_position & LEFT)
+						temp2.Insert(new/icon(temp,dir=EAST),dir=EAST)
+					if(part.icon_position & RIGHT)
+						temp2.Insert(new/icon(temp,dir=WEST),dir=WEST)
+					base_icon.Blend(temp2, ICON_UNDERLAY)
+				else if(part.icon_position & UNDER)
+					base_icon.Blend(temp, ICON_UNDERLAY)
+				else
+					base_icon.Blend(temp, ICON_OVERLAY)
 
 		if(!skeleton)
 			if(husk)

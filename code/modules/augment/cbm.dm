@@ -182,6 +182,10 @@
 /obj/item/device/compact_bionic_module/engineering_toolset
 	augment_type = /obj/item/organ/internal/augment/active/polytool/engineer
 
+/obj/item/device/compact_bionic_module/gunnery
+	augment_type = /obj/item/organ/internal/augment/boost/shooting
+	cbm_debug = TRUE
+
 #undef CBM_STEP_CUT_OPEN
 #undef CBM_STEP_FRACTURE
 #undef CBM_STEP_INSTALL_AUGMENT
