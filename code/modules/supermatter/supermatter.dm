@@ -64,9 +64,10 @@
 	var/emergency_alert = "CRYSTAL DELAMINATION IMMINENT."
 	var/explosion_point = 1000
 
-	light_color = "#8a8a00"
-	var/warning_color = "#b8b800"
-	var/emergency_color = "#d9d900"
+	light_color = "#927a10"
+	var/base_color = "#927a10"
+	var/warning_color = "#c78c20"
+	var/emergency_color = "#ffd04f"
 
 	var/grav_pulling = 0
 	// Time in ticks between delamination ('exploding') and exploding (as in the actual boom)
@@ -338,7 +339,7 @@
 		if(!istype(L, /turf/space) && ((world.timeofday - lastwarning) >= WARNING_DELAY * 10) && (L.z in GLOB.using_map.station_levels))
 			announce_warning()
 	else
-		shift_light(4,initial(light_color))
+		shift_light(4,base_color)
 	if(grav_pulling)
 		supermatter_pull(src)
 
@@ -362,6 +363,19 @@
 		damage_archived = damage
 
 		damage = max(0, damage + between(-damage_rate_limit, (removed.temperature - critical_temperature) / 150, damage_inc_limit))
+
+		color = color_contrast(Interpolate(0, 50, Clamp( (damage - emergency_point) / (explosion_point - emergency_point),0,1)))
+
+		if(damage > emergency_point && !filters.len)
+			filters = filter(type="rays", size = 64, color = emergency_color, factor = 0.6, density = 12)
+			animate(filters[1], time = 10 SECONDS, offset = 10, loop=-1)
+			animate(time = 10 SECONDS, offset = 0, loop=-1)
+			//animate(time = 0 SECONDS, offset = 0)
+
+			animate(filters[1], time = 2 SECONDS, size = 80, loop=-1, flags = ANIMATION_PARALLEL)
+			animate(time = 2 SECONDS, size = 10, loop=-1, flags = ANIMATION_PARALLEL)
+		if(damage < emergency_point)
+			filters.Cut()
 
 		//Ok, 100% oxygen atmosphere = best reaction
 		//Maxes out at 100% oxygen pressure
@@ -584,3 +598,58 @@
 #undef DETONATION_SHUTDOWN_RNG_FACTOR
 #undef DETONATION_SOLAR_BREAK_CHANCE
 #undef WARNING_DELAY
+
+
+//Warning lights
+/obj/effect/spinning_light
+	var/spin_rate = 1 SECOND
+	var/_size = 48
+	var/_factor = 0.5
+	var/_density = 4
+	var/_offset = 30
+
+
+/obj/effect/spinning_light/Initialize()
+	. = ..()
+	filters = filter(type="rays", size = _size, color = COLOR_ORANGE, factor = _factor, density = _density, flags = FILTER_OVERLAY, offset = _offset)
+
+	alpha = 200
+	var matrix/m = new
+	animate(src, transform = m.Turn(120), spin_rate / 3, loop = -1, )
+	animate(transform = m.Turn(120), spin_rate / 3, loop = -1, )
+	animate(transform = matrix(),    spin_rate / 3, loop = -1, )
+
+/obj/machinery/supermatter_alarm
+	name = "Supermatter alarm"
+	desc = "An industrial rotating alarm light. This one is used to monitor supermatter engines."
+	icon = 'icons/obj/supermatter.dmi'
+	icon_state = "supermatter_alarm"
+	idle_power_usage = 0
+	active_power_usage = 0
+	//power_channel = LIGHT //Lights are calc'd via area so they don't need to be in the machine list
+
+	var/on = 0					// 1 if on, 0 if off
+	var/construct_type = /obj/machinery/light_construct
+
+
+	var/static/weakref/spin_effect = null
+
+/obj/machinery/supermatter_alarm/Initialize()
+	. = ..()
+
+	if(!spin_effect || !spin_effect.resolve())
+		var/obj/effect/spinning_light/S = new(null)
+		spin_effect = weakref(S)
+
+	seton()
+
+/obj/machinery/supermatter_alarm/proc/seton()
+	vis_contents += spin_effect.resolve()
+
+	set_light(1, 0.5, 3, 0.3, COLOR_PALE_ORANGE)
+
+/obj/machinery/supermatter_alarm/attack_hand(mob/user)
+	. = ..()
+
+	// _offset += 1
+	// seton()

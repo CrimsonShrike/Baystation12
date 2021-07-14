@@ -92,6 +92,23 @@
 	charging_factor = rand(0, 1)
 	damage_rate_limit = rand( 1, 10)		//damage rate cap at power = 300, scales linearly with power
 
+	//Change fune colours
+	var/list/color_matrix = color_rotation(rand(-180, 180))
+
+	color = color_matrix
+
+	var/list/RGB = rgb2num(base_color)
+	RGB = multiply_matrices(color_matrix, RGB, 3, 3, 1)
+	base_color = rgb(clamp(RGB[1], 0, 255), clamp(RGB[2], 0, 255), clamp(RGB[3], 0, 255))
+	RGB = rgb2num(warning_color)
+	RGB = multiply_matrices(color_matrix, RGB, 3, 3, 1)
+	warning_color = rgb(clamp(RGB[1], 0, 255), clamp(RGB[2], 0, 255), clamp(RGB[3], 0, 255))
+	RGB = rgb2num(emergency_color)
+	RGB = multiply_matrices(color_matrix, RGB, 3, 3, 1)
+	emergency_color = rgb(clamp(RGB[1], 0, 255), clamp(RGB[2], 0, 255), clamp(RGB[3], 0, 255))
+
+	light_color = base_color
+
 /obj/machinery/power/supermatter/inert
 	name = "experimental supermatter sample"
 	icon_state = "darkmatter_shard"
