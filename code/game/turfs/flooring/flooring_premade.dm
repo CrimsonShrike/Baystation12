@@ -415,3 +415,9 @@
 	icon = 'icons/turf/flooring/pool.dmi'
 	icon_state = "pool"
 	initial_flooring = /decl/flooring/pool
+
+/turf/simulated/floor/forcefield
+	name = "ship airshield"
+	icon = 'icons/turf/flooring/forcefield.dmi'
+	icon_state = "floor"
+	initial_flooring = /decl/flooring/forcefield
