@@ -414,6 +414,14 @@
 	space_smooth = SMOOTH_NONE
 	height = -FLUID_OVER_MOB_HEAD * 2
 
+/decl/flooring/forcefield
+	name = "ship forcefield"
+	desc = "A shimmering barrier of pure energy."
+	icon = 'icons/turf/flooring/forcefield.dmi'
+	icon_base = "floor"
+	build_type = null
+	flags = TURF_HAS_CORNERS | TURF_HAS_INNER_CORNERS | TURF_ACID_IMMUNE
+	footstep_type = /decl/footsteps/blank
 
 /singleton/flooring/bluespace
 	name = "bluespace"

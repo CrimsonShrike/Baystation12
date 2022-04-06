@@ -416,3 +416,9 @@
 			SPAN_WARNING("You feel your entire body tingle, and something pulling you away!")
 		)
 		addtimer(new Callback(GLOBAL_PROC, /proc/do_unstable_teleport_safe, L, GetConnectedZlevels(L.z)), rand(5, 15))
+		
+/turf/simulated/floor/forcefield
+	name = "ship airshield"
+	icon = 'icons/turf/flooring/forcefield.dmi'
+	icon_state = "floor"
+	initial_flooring = /decl/flooring/forcefield
