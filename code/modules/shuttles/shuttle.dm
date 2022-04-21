@@ -77,6 +77,9 @@
 /datum/shuttle/proc/short_jump(obj/shuttle_landmark/destination)
 	if(moving_status != SHUTTLE_IDLE) return
 
+	//notify landmark that we're going to take off
+	GLOB.shuttle_pre_take_off_event.raise_event(src, current_location, destination)
+
 	moving_status = SHUTTLE_WARMUP
 	if(sound_takeoff)
 		playsound(current_location, sound_takeoff, 100, 20, 0.2)
@@ -89,6 +92,9 @@
 			if(istype(S))
 				S.cancel_launch(null)
 			return
+
+		//Need to notify landmark whether take off did succeed
+		//Need to notify destination landmark that we're landing
 
 		moving_status = SHUTTLE_INTRANSIT //shouldn't matter but just to be safe
 		attempt_move(destination)
@@ -109,6 +115,8 @@
 				if (M.client && M.z == A.z && !istype(get_turf(M), /turf/space) && !(get_area(M) in src.shuttle_area))
 					to_chat(M, SPAN_NOTICE("The rumble of engines are heard as a shuttle lifts off."))
 
+	//Need to notigy landmark that we're taking off
+
 	spawn(warmup_time*10)
 		if(moving_status == SHUTTLE_IDLE)
 			return	//someone cancelled the launch
@@ -119,9 +127,12 @@
 				S.cancel_launch(null)
 			return
 
+		//Need to notify landmark that take off was succesful (if it was)
+
 		arrive_time = world.time + travel_time*10
 		moving_status = SHUTTLE_INTRANSIT
 		if(attempt_move(interim))
+			//Notify destination that we're heading for landing
 			var/fwooshed = 0
 			while (world.time < arrive_time)
 				if(!fwooshed && (arrive_time - world.time) < 100)
@@ -135,6 +146,7 @@
 								to_chat(M, SPAN_NOTICE("The rumble of a shuttle's engines fill the area as a ship manuevers in for a landing."))
 
 				sleep(5)
+			//Tell destination whether we landed
 			if(!attempt_move(destination))
 				attempt_move(start_location) //try to go back to where we started. If that fails, I guess we're stuck in the interim location
 

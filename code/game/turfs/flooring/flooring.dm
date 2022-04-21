@@ -416,14 +416,14 @@
 	space_smooth = SMOOTH_NONE
 	height = -FLUID_OVER_MOB_HEAD * 2
 
-/decl/flooring/forcefield
+/singleton/flooring/forcefield
 	name = "ship forcefield"
 	desc = "A shimmering barrier of pure energy."
 	icon = 'icons/turf/flooring/forcefield.dmi'
 	icon_base = "forcefield"
 	build_type = null
 	flags = TURF_HAS_CORNERS | TURF_ACID_IMMUNE
-	footstep_type = /decl/footsteps/blank
+	footstep_type = /singleton/footsteps/blank
 
 /singleton/flooring/bluespace
 	name = "bluespace"
@@ -436,8 +436,6 @@
 	floor_smooth = SMOOTH_NONE
 	wall_smooth = SMOOTH_ALL
 	space_smooth = SMOOTH_NONE
-	can_engrave = FALSE
-	z_flags = ZM_MIMIC_BELOW
 
 /singleton/flooring/glass
 	name = "glass flooring"
@@ -446,13 +444,16 @@
 	icon_base = "glassfloor"
 	build_type = /obj/item/stack/material/glass/reinforced
 	damage_temperature = T100C
-	flags = TURF_REMOVE_CROWBAR | TURF_ACID_IMMUNE
+	flags = TURF_REMOVE_CROWBAR
 	can_engrave = FALSE
 	color = GLASS_COLOR
 	z_flags = ZM_MIMIC_BELOW
+	floor_smooth = SMOOTH_NONE
+	wall_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE
 
 /singleton/flooring/glass/boro
 	name = "borosilicate glass flooring"
-	build_type = /obj/item/stack/material/glass/phoronglass
-	color = GLASS_COLOR_PHORON
+	build_type = /obj/item/stack/material/glass/boron
+	color = GLASS_COLOR_BORON
 	damage_temperature = T0C + 4000
