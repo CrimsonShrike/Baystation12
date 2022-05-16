@@ -99,3 +99,6 @@
 
 /proc/cmp_marking_order(list/A, list/B)
 	return A[1] - B[1][1]
+
+/proc/cmp_filter_data_priority(list/A, list/B)
+	return A["priority"] - B["priority"]

@@ -35,13 +35,13 @@
 
 // Openspace uses planes -80 through -70.
 
-#define OVER_OPENSPACE_PLANE        -4
+#define OVER_OPENSPACE_PLANE        -10
+
+#define WARP_EFFECT_PLANE -9
 
 #define BLACKNESS_PLANE                 0 //Blackness plane as per DM documentation.
 
-#define WARP_EFFECT_PLANE -3
-
-#define DEFAULT_PLANE                   1
+#define DEFAULT_PLANE                   -8
 	#define PLATING_LAYER               1
 	//ABOVE PLATING
 	#define HOLOMAP_LAYER               1.01
@@ -129,19 +129,26 @@
 	#define OBFUSCATION_LAYER           5.2
 	#define BASE_AREA_LAYER             999
 
-#define OBSERVER_PLANE             2
+#define MIRROR_PLANE -7
+	 #define MIRROR_RENDER_TARGET "*MIR_RENDER_TARGET"
 
-#define LIGHTING_PLANE             3 // For Lighting. - The highest plane (ignoring all other even higher planes)
+#define SCENE_REFLECTION_PLANE -6
+ #define SCENE_TARGET "*scene"
+ #define REFLECTION_TARGET "*reflection"
+
+#define OBSERVER_PLANE             4
+
+#define LIGHTING_PLANE             5 // For Lighting. - The highest plane (ignoring all other even higher planes)
 	#define LIGHTBULB_LAYER        0
 	#define LIGHTING_LAYER         1
 	#define ABOVE_LIGHTING_LAYER   2
 
-#define EFFECTS_ABOVE_LIGHTING_PLANE   4 // For glowy eyes, laser beams, etc. that shouldn't be affected by darkness
+#define EFFECTS_ABOVE_LIGHTING_PLANE   6 // For glowy eyes, laser beams, etc. that shouldn't be affected by darkness
 	#define EYE_GLOW_LAYER         1
 	#define BEAM_PROJECTILE_LAYER  2
 	#define SUPERMATTER_WALL_LAYER 3
 
-#define FULLSCREEN_PLANE                5 // for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE                7 // for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER    0
 	#define DAMAGE_LAYER        1
@@ -149,7 +156,7 @@
 	#define BLIND_LAYER         3
 	#define CRIT_LAYER          4
 
-#define HUD_PLANE                    6
+#define HUD_PLANE                    8
 	#define UNDER_HUD_LAYER              0
 	#define HUD_BASE_LAYER               2
 	#define HUD_ITEM_LAYER               3

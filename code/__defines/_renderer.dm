@@ -121,7 +121,17 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Game"
 	group = RENDER_GROUP_SCENE
 	plane = DEFAULT_PLANE
+	render_target_name = SCENE_TARGET
 
+
+//Handles mirror reflection
+// This planemaster combines the different mirrors to use as displacement map for the reflection
+/atom/movable/renderer/mirror
+	name = "Mirror"
+	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	plane = MIRROR_PLANE
+	render_target_name = MIRROR_RENDER_TARGET
+	group = RENDER_GROUP_NONE
 
 /// Draws observers; ghosts, camera eyes, etc.
 /atom/movable/renderer/observers
@@ -199,6 +209,25 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	group = RENDER_GROUP_NONE
 	plane = RENDER_GROUP_FINAL
 
+//Renders the actual reflections, which exist as a combination of the scene and the mirror planemasters
+//Anything that needs to reflect the world should simply use this plane
+/atom/movable/renderer/reflection
+	name = "Reflection"
+	plane = SCENE_REFLECTION_PLANE
+	//render_target_name = REFLECTION_TARGET
+	group = RENDER_GROUP_SCENE
+	render_source = SCENE_TARGET
+	render_target_name = REFLECTION_TARGET
+
+/atom/movable/renderer/reflection/Initialize()
+	. = ..()
+	//filters += filter(type = "layer", render_source = SCENE_TARGET, flags = FILTER_OVERLAY)
+	filters += filter(type = "displace", render_source = MIRROR_RENDER_TARGET, size = 64)
+	//filters += filter(type = "alpha", render_source = "*MIR_RENDER_TARGET")
+	filters += filter(type = "alpha", render_source = MIRROR_RENDER_TARGET)
+	// add_filter("layer_mirror", 1, layering_filter(render_source = SCENE_TARGET, flags = FILTER_UNDERLAY))
+	// add_filter("mirror", 1, displacement_map_filter(render_source = MIRROR_RENDER_TARGET, size = 32))
+
 
 /* *
 * Effect Renderers
@@ -222,6 +251,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 /atom/movable/renderer/scene_group/Initialize()
 	. = ..()
 	filters += filter(type = "displace", render_source = "*warp", size = 5)
+
 
 
 /// Example of a warp filter for /renderer use
