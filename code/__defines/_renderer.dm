@@ -188,6 +188,37 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	relay_blend_mode = BLEND_MULTIPLY
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
 
+/*!
+ * This system works by exploiting BYONDs color matrix filter to use layers to handle emissive blockers.
+ *
+ * Emissive overlays are pasted with an atom color that converts them to be entirely some specific color.
+ * Emissive blockers are pasted with an atom color that converts them to be entirely some different color.
+ * Emissive overlays and emissive blockers are put onto the same plane.
+ * The layers for the emissive overlays and emissive blockers cause them to mask eachother similar to normal BYOND objects.
+ * A color matrix filter is applied to the emissive plane to mask out anything that isn't whatever the emissive color is.
+ * This is then used to alpha mask the lighting plane.
+ */
+
+/atom/movable/renderer/lighting/lighting/Initialize(mapload)
+	. = ..()
+	//One day it'd be great to port TG functions for managed filters
+	filters += filter(type = "alpha", render_source = EMISSIVE_RENDER_TARGET, flags = MASK_INVERSE)
+
+/**
+ * Handles emissive overlays and emissive blockers.
+ */
+/atom/movable/renderer/emissive
+	name = "Render planemaster"
+	plane = EMISSIVE_PLANE
+	group = RENDER_GROUP_NONE //We are not compounding this
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	render_target_name = EMISSIVE_RENDER_TARGET
+	appearance_flags = PLANE_MASTER|NO_CLIENT_COLOR //Obviously this doesnt work if daltornism breaks emissives
+
+/atom/movable/renderer/emissive/Initialize(mapload)
+	. = ..()
+	filters += filter(type = "color", color = GLOB.em_mask_matrix)
+
 /// Draws visuals that should not be affected by darkness.
 /atom/movable/renderer/above_lighting
 	name = "Above Lighting"
