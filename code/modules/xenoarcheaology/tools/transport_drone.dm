@@ -252,3 +252,22 @@
 	var/scanner_rate = total_component_rating_of_type(/obj/item/stock_parts/scanning_module)
 	tile_travel_time = (15 SECONDS) * 4 / (scanner_rate ? scanner_rate : 1)
 	update_icon()
+
+
+/obj/structure/closet/testatue //what
+	name = "statue"
+	desc = "An incredibly lifelike marble carving."
+	icon = 'icons/obj/statue.dmi'
+	icon_state = "human_male"
+	density = TRUE
+	anchored = TRUE
+	setup = 0
+	health_max = 0
+
+/obj/structure/closet/testatue/examine(mob/user, distance)
+	. = ..()
+	if(user)
+		//var/datum/browser/popup = new(user, "painting", null, 420, 420)
+		user << browse("<img src='https://www.shutterstock.com/image-photo/red-apple-isolated-on-white-260nw-1727544364.jpg'>")
+		//popup.set_content()
+		//popup.open()
