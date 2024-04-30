@@ -20,3 +20,14 @@
 	emergency_shuttle_leaving_dock = "The emergency escape shuttle has departed from %dock_name%."
 	emergency_shuttle_called_message = "An emergency escape shuttle has been sent."
 	emergency_shuttle_recall_message = "The emergency shuttle has been recalled"
+
+	use_overmap = 1
+
+/obj/overmap/visitable/ship/example
+	name = "USS Example McExamply"
+	desc = "WE ARE GONNA CRASH"
+	fore_dir = NORTH
+	vessel_mass = 100000
+	sector_flags = OVERMAP_SECTOR_KNOWN|OVERMAP_SECTOR_IN_SPACE|OVERMAP_SECTOR_BASE
+	light_power = 0.5
+	light_range = 13

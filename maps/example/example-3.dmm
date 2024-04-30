@@ -175,6 +175,10 @@
 /obj/floor_decal/corner/blue/diagonal,
 /turf/simulated/floor/tiled,
 /area/maintenance/fsmaint2)
+"X" = (
+/obj/overmap/visitable/ship/example,
+/turf/space,
+/area/space)
 
 (1,1,1) = {"
 a
@@ -208,7 +212,7 @@ a
 a
 a
 a
-a
+X
 "}
 (2,1,1) = {"
 a

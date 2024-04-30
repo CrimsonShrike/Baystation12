@@ -14988,6 +14988,10 @@
 /area/maintenance/fourthdeck/port)
 "WB" = (
 /obj/shuttle_landmark/admin/out,
+/obj/dockingtube_controller{
+	dir = 1;
+	icon_state = "airbridge"
+	},
 /turf/space,
 /area/space)
 "WC" = (

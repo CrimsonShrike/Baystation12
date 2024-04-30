@@ -2647,6 +2647,7 @@
 #include "code\modules\overmap\disperser\disperser_circuit.dm"
 #include "code\modules\overmap\disperser\disperser_console.dm"
 #include "code\modules\overmap\disperser\disperser_fire.dm"
+#include "code\modules\overmap\dockingtube\dockingtube.dm"
 #include "code\modules\overmap\events\event.dm"
 #include "code\modules\overmap\exoplanets\_exoplanet.dm"
 #include "code\modules\overmap\exoplanets\exoplanet_atmosphere.dm"

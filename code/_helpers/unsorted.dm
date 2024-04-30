@@ -1079,3 +1079,24 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 		return matches[1]
 	else
 		return (input("Select a type", "Select Type", matches[1]) as null|anything in matches)
+
+/proc/get_steps(var/atom/ref, var/dir, var/numsteps)
+	var/atom/res = null
+	switch(dir)
+		if(NORTH)
+			res = locate(ref.x, ref.y+numsteps, ref.z)
+		if(NORTHEAST)
+			res = locate(ref.x+numsteps, ref.y+numsteps, ref.z)
+		if(EAST)
+			res = locate(ref.x+numsteps, ref.y, ref.z)
+		if(SOUTHEAST)
+			res = locate(ref.x+numsteps, ref.y-numsteps, ref.z)
+		if(SOUTH)
+			res = locate(ref.x, ref.y-numsteps, ref.z)
+		if(SOUTHWEST)
+			res = locate(ref.x-numsteps, ref.y-numsteps, ref.z)
+		if(WEST)
+			res = locate(ref.x-numsteps, ref.y, ref.z)
+		if(NORTHWEST)
+			res = locate(ref.x-numsteps, ref.y+numsteps, ref.z)
+	return res

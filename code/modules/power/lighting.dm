@@ -208,6 +208,13 @@
 	light_type = /obj/item/light/bulb
 	construct_type = /obj/machinery/light_construct/small
 
+/obj/machinery/light/small/floor
+	icon_state = "floor1"
+	base_state = "floor"
+	desc = "A small lighting fixture, embedded in the floor."
+	light_type = /obj/item/light/bulb
+	construct_type = /obj/machinery/light_construct/small
+
 /obj/machinery/light/small/emergency
 	light_type = /obj/item/light/bulb/red
 
