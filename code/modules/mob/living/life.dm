@@ -41,6 +41,11 @@
 
 	handle_regular_hud_updates()
 
+	//update our thermal image relative to our surroundings
+
+	if(thermal_image)
+		thermal_image.process_appearance()
+
 	return 1
 
 /mob/living/proc/handle_breathing()
@@ -210,7 +215,7 @@
 		set_see_invisible(SEE_INVISIBLE_NOLIGHTING)
 
 /mob/living/proc/update_living_sight()
-	var/set_sight_flags = sight & ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
+	var/set_sight_flags = sight & ~(SEE_TURFS|SEE_MOBS|SEE_OBJS|SEE_PIXELS|SEE_INFRA)
 	if(stat & UNCONSCIOUS)
 		set_sight_flags |= BLIND
 	else
@@ -280,3 +285,7 @@
 /mob/living/set_see_in_dark(new_see_in_dark)
 	. = ..()
 	handle_darksight()
+
+// Used by thermal effects. Not very useful elsewhere
+/mob/living/get_warmth()
+	return bodytemperature

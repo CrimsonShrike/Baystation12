@@ -151,6 +151,9 @@
 	#define SUPERMATTER_WALL_LAYER 3
 	#define SPEECH_INDICATOR_LAYER 4
 
+#define THERMALS_PLANE               5 //for thermal imaging
+	#define MAIN_THERMAL_LAYER       2
+
 #define FULLSCREEN_PLANE                500 // for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER    0
@@ -172,6 +175,9 @@
 	/// The layer you should use when you -really- don't want an emissive overlay to be blocked.
 	#define EMISSIVE_LAYER_UNBLOCKABLE 9999
 
+/// This one is for thermal images and artefacts on thermal sights.
+#define TEMPERATURE_TARGET "*thermal"
+
 //-------------------- Rendering ---------------------
 
 /// Semantics - The final compositor or a filter effect renderer
@@ -179,6 +185,9 @@
 
 /// Things to be drawn within the game context
 #define RENDER_GROUP_SCENE 800
+
+/// A horrible, disturbed layer that renders above the scene but below the screen, because otherwise thermal images and such would display over blindness
+#define RENDER_GROUP_SIGHTS 995
 
 /// Things to be drawn within the screen context
 #define RENDER_GROUP_SCREEN 850

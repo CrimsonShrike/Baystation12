@@ -41,3 +41,5 @@ GLOBAL_LIST_INIT(wall_noblend_objects, list(
 GLOBAL_LIST_INIT(wall_fullblend_objects, list(
 	/obj/structure/wall_frame
 ))
+
+GLOBAL_LIST_EMPTY(lifesigns_objs)           // List of all the life sign overlays currently in existence, used by life sensors.

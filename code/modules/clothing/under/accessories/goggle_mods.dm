@@ -6,6 +6,7 @@
 	var/obj/screen/overlay
 	var/thermals = FALSE
 	var/nvg = FALSE
+	var/atom/movable/renderer/renderer
 	body_location = EYES
 	accessory_icons = list(
 		slot_tie_str = 'icons/mob/onmob/onmob_goggle_mod.dmi',
@@ -58,17 +59,19 @@
 	name = "thermal sights"
 	desc = "An older set of thermal vision goggles, modified to attach to a helmet."
 	icon_state = "thermals"
-	slot = ACCESSORY_SLOT_HELMET_VISOR
-	vision_flags = SEE_MOBS
-	see_invisible = SEE_INVISIBLE_NOLIGHTING
+	slot = ACCESSORY_SLOT_VISOR
+	vision_flags = SEE_INFRA
 	toggleable = TRUE
 	off_state = "thermoff"
 	electric = TRUE
 	thermals = TRUE
-	tint = TINT_HEAVY
 	activation_sound = 'sound/items/metal_clicking_4.ogg'
 	deactivation_sound = 'sound/items/metal_clicking_4.ogg'
 	action_button_name = "Toggle Thermals"
+
+/obj/item/clothing/accessory/glassesmod/thermal/Initialize()
+	. = ..()
+	renderer = new /atom/movable/renderer/thermals
 
 
 /obj/item/clothing/accessory/glassesmod/nvg

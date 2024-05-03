@@ -14,6 +14,7 @@
 	mob_size =     MOB_LARGE
 	mob_push_flags = ALLMOBS
 	mob_flags = MOB_FLAG_UNPINNABLE
+	var/running_temp_gain = 6 //the amount it tries to heat up by per tick while running
 
 	meat_type = null
 	meat_amount = 0

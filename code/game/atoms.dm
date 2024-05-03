@@ -1050,3 +1050,7 @@
 
 /atom/proc/get_overhead_text_y_offset()
 	return 0
+
+//this is for thermal imaging, anything that gets called with this should have its own special definition
+/atom/proc/get_warmth()
+	return //if this gets called without proper definition, it should runtime because you're not supposed to do this.

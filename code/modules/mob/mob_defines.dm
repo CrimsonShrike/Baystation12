@@ -202,3 +202,5 @@
 	// Offset the overhead text if necessary.
 	var/offset_overhead_text_x = 0
 	var/offset_overhead_text_y = 0
+	var/obj/effect/visionoverlay/thermal/thermal_image //Essentially an image of the mob that can be seen by thermal imaging, e.g. thermal sights
+	var/obj/effect/visionoverlay/wallhax/lifesigns //Big dot that shows when a mob is alive
