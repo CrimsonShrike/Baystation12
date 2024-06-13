@@ -460,6 +460,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	plane = THERMALS_PLANE
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
 	render_target_name = TEMPERATURE_TARGET
+	renderer_flags = RENDERER_SHARED | RENDERER_SHARED_CUSTOM //It is pretty much a shared custom one, non standard
 	temporary = TRUE
 	color = list(
 		1, 0, 0,

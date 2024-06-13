@@ -59,7 +59,7 @@
 	name = "thermal sights"
 	desc = "An older set of thermal vision goggles, modified to attach to a helmet."
 	icon_state = "thermals"
-	slot = ACCESSORY_SLOT_VISOR
+	slot = ACCESSORY_SLOT_HELMET_VISOR
 	vision_flags = SEE_INFRA
 	toggleable = TRUE
 	off_state = "thermoff"

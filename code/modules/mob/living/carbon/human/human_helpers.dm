@@ -93,7 +93,7 @@
 				equipment_see_invis = G.see_invisible
 		if (G.renderer)
 			if (client)
-				addrenderer(client, G.renderer)
+				add_temporary_renderer(client, G.renderer)
 
 		add_clothing_protection(G)
 		G.process_hud(src)
@@ -116,7 +116,7 @@
 						equipment_see_invis = mod.see_invisible
 				if (mod.renderer)
 					if (client)
-						addrenderer(client, mod.renderer)
+						add_temporary_renderer(client, mod.renderer)
 				if (mod.thermals)
 					//this breaks if more than one thermal accessory is worn at once
 					add_client_color(/datum/client_color/monochrome)
@@ -140,7 +140,7 @@
 						equipment_see_invis = mod.see_invisible
 				if (mod.renderer)
 					if (client)
-						addrenderer(client, mod.renderer)
+						add_temporary_renderer(client, mod.renderer)
 				if (mod.thermals)
 					//this breaks if more than one thermal accessory is worn at once
 					add_client_color(/datum/client_color/monochrome)
@@ -155,7 +155,7 @@
 	if(O.visor && O.visor.active && O.visor.vision && O.visor.vision.glasses && (!O.helmet || (head && O.helmet == head)))
 		process_glasses(O.visor.vision.glasses)
 
-/mob/living/carbon/human/proc/addrenderer(tmp/client/client, atom/movable/renderer/renderer)
+/mob/living/carbon/human/proc/add_temporary_renderer(tmp/client/client, atom/movable/renderer/renderer)
 	if(eye_blind <= 0 && health > 0)
 		if (istype(renderer, /atom/movable/renderer/thermals))
 			see_infrared = 1
