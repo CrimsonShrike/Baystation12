@@ -374,9 +374,9 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	if (ismob(M))
 		var/quality = M.get_preference_value(/datum/client_preference/graphics_quality)
 		if (gas_heat_object)
-			vis_contents -= gas_heat_object
+			remove_vis_contents(gas_heat_object)
 		if (gas_cold_object)
-			vis_contents -= gas_cold_object
+			remove_vis_contents(gas_cold_object)
 		if (quality == GLOB.PREF_LOW)
 			QDEL_NULL(gas_heat_object)
 			gas_heat_object = new /obj/heat
@@ -390,9 +390,9 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 				gas_heat_object = new /obj/particle_emitter/heat
 			else if (quality == GLOB.PREF_HIGH)
 				gas_heat_object = new /obj/particle_emitter/heat/high
-		vis_contents += gas_heat_object
+		add_vis_contents(gas_heat_object)
 		if (config.enable_cold_mist)
-			vis_contents += gas_cold_object
+			add_vis_contents(gas_cold_object)
 
 
 /atom/movable/renderer/heat/Initialize()

@@ -43,11 +43,12 @@
 #define SS_INIT_GOALS           -5
 #define SS_INIT_LIGHTING        -6
 #define SS_INIT_AMBIENT_LIGHT   -7
-#define SS_INIT_ZCOPY           -8
-#define SS_INIT_HOLOMAP         -9
-#define SS_INIT_OVERLAYS        -10
-#define SS_INIT_XENOARCH        -11
-#define SS_INIT_BAY_LEGACY      -12
+#define SS_INIT_WEATHER         -8
+#define SS_INIT_ZCOPY           -9
+#define SS_INIT_HOLOMAP         -10
+#define SS_INIT_OVERLAYS        -11
+#define SS_INIT_XENOARCH        -12
+#define SS_INIT_BAY_LEGACY      -13
 #define SS_INIT_TICKER          -20
 #define SS_INIT_AI              -21
 #define SS_INIT_AIFAST          -22

@@ -1050,3 +1050,10 @@
 
 /atom/proc/get_overhead_text_y_offset()
 	return 0
+
+/atom/proc/get_affecting_weather()
+	return
+
+/atom/proc/is_outside()
+	var/turf/turf = get_turf(src)
+	return istype(turf) ? turf.is_outside() : OUTSIDE_UNCERTAIN
