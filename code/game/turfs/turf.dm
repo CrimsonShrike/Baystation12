@@ -55,7 +55,7 @@
 	if (light_power && light_range)
 		update_light()
 
-	if (!mapload || (!istype(src, /turf/space) && is_outside()))
+	if (!mapload || is_outside())
 		SSambient_lighting.queued += src
 
 	if (opacity)
