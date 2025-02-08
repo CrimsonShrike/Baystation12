@@ -13,9 +13,10 @@
 /turf/simulated/get_air_graphic()
 	if(zone && !zone.invalid)
 		return zone.air?.graphic
-	// if(external_atmosphere_participation && is_outside())
-	// 	var/datum/level_data/level = SSmapping.levels_by_z[z]
-	// 	return level.exterior_atmosphere.graphic
+	if(external_atmosphere_participation && is_outside())
+		var/obj/overmap/visitable/E = map_sectors["[z]"]
+		if (E)
+			return E.exterior_atmosphere.graphic
 	var/datum/gas_mixture/environment = return_air()
 	return environment?.graphic
 
@@ -256,11 +257,9 @@
 	//Create gas mixture to hold data for passing
 	var/datum/gas_mixture/GM = new
 
-	if(initial_gas)
+	if (initial_gas)
 		GM.gas = initial_gas.Copy()
 	GM.temperature = temperature
-	if (weather)
-		GM.temperature = weather.adjust_temperature(GM.temperature)
 	GM.update_values()
 
 	return GM
@@ -276,7 +275,7 @@
 /turf/simulated/assume_gas(gasid, moles, temp = null)
 	var/datum/gas_mixture/my_air = return_air()
 
-	if(isnull(temp))
+	if (isnull(temp))
 		my_air.adjust_gas(gasid, moles)
 	else
 		my_air.adjust_gas_temp(gasid, moles, temp)
@@ -284,19 +283,42 @@
 	return 1
 
 /turf/simulated/return_air()
-	if(zone)
-		if(!zone.invalid)
-			SSair.mark_zone_update(zone)
-			return zone.air
-		else
-			if(!air)
-				make_air()
+	// ZAS participation
+	if (zone && !zone.invalid)
+		SSair.mark_zone_update(zone)
+		return zone.air
+
+	// Exterior turf global atmosphere
+	if ((!air && isnull(initial_gas)) || (external_atmosphere_participation && is_outside()))
+		. = get_external_air()
+
+	// Base behavior
+	if (!.)
+		. = air || make_air()
+		if (zone)
 			c_copy_air()
-			return air
-	else
-		if(!air)
-			make_air()
-		return air
+			zone = null
+
+// Returns the external air if this turf is outside, modified by weather and heat sources. Outside checks do not occur in this proc!
+/turf/proc/get_external_air(include_heat_sources = TRUE)
+	var/obj/overmap/visitable/E = map_sectors["[z]"]
+	if (!E)
+		return null
+	var/datum/gas_mixture/gas = E.get_exterior_atmosphere()
+	if (!include_heat_sources)
+		return gas
+
+	if (weather)
+		gas.temperature = weather.adjust_temperature(gas.temperature)
+	//TODO: port heat sources from nebula
+	//var/initial_temperature = gas.temperature
+	// if(length(affecting_heat_sources))
+	// 	for(var/obj/structure/fire_source/heat_source as anything in affecting_heat_sources)
+	// 		gas.temperature = gas.temperature + heat_source.exterior_temperature / max(1, get_dist(src, get_turf(heat_source)))
+	// 		if(abs(gas.temperature - initial_temperature) >= 100)
+	// 			break
+	gas.update_values()
+	return gas
 
 /turf/proc/make_air()
 	air = new/datum/gas_mixture
@@ -304,6 +326,7 @@
 	if(initial_gas)
 		air.gas = initial_gas.Copy()
 	air.update_values()
+	return air
 
 /turf/simulated/proc/c_copy_air()
 	if(!air) air = new/datum/gas_mixture

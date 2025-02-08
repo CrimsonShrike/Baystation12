@@ -45,6 +45,7 @@
 	var/old_zflags = z_flags
 	var/old_outside = is_outside
 	var/old_is_open = is_open()
+	var/old_zone_membership_candidate = FALSE
 
 	if(isspaceturf(N) || isopenspace(N))
 		QDEL_NULL(turf_fire)
@@ -65,6 +66,7 @@
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
 		if(S.zone) S.zone.rebuild()
+		old_zone_membership_candidate = S.zone_membership_candidate
 
 	if(ambient_bitflag) //Should remove everything about current bitflag, let it be recalculated by SS later
 		SSambient_lighting.clean_turf(src)
@@ -131,6 +133,10 @@
 	if(W.is_outside != old_outside)
 		// This will check the exterior atmos participation of this turf and all turfs connected by open space below.
 		W.set_outside(old_outside, skip_weather_update = TRUE)
+
+	// In case the turf isn't marked for update in Initialize (e.g. space), we call this to create any unsimulated edges necessary.
+	if(W.zone_membership_candidate != old_zone_membership_candidate)
+		W.update_external_atmos_participation()
 
 	W.update_weather(force_update_below = W.is_open() != old_is_open)
 
