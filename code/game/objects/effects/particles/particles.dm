@@ -255,6 +255,21 @@
 	count = 600
 	spawning = 35
 
+/particles/screen_droplets
+	name = "rain_screen1"
+	count = 50
+	spawning = 3
+	icon = 'icons/effects/64x64.dmi'
+	icon_state = list("droplet1", "droplet2")
+	width = 640
+	height = 640
+	lifespan = 7 SECONDS
+	fade = 0.15 SECONDS
+	fadein = 0.75 SECONDS
+	position = generator("box", list(-300,-300,0), list(300,300,50))
+	//bound1 = list(-1000, -300, -1000)   // end particles at Y=-300
+
+
 
 //Spawner object
 //Maybe we could pool them in and out
@@ -383,3 +398,7 @@
 	. = ..()
 	b = new b(null)
 	add_vis_contents(b)
+
+/obj/particle_emitter/screenrain1
+	particle_type = "rain_screen1"
+	plane = WARP_EFFECT_PLANE
