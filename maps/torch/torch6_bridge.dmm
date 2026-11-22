@@ -1689,6 +1689,11 @@
 	dir = 5
 	},
 /obj/item/book/manual/solgov_law,
+/obj/random_multi/single_item/memo_scgr,
+/obj/random_multi/single_item/memo_command,
+/obj/random_multi/single_item/memo_corporate,
+/obj/random_multi/single_item/punitelli,
+/obj/item/tableflag/rainbow/pride,
 /turf/simulated/floor/tiled/dark/monotile,
 /area/bridge/meeting_room)
 "cY" = (
@@ -1697,6 +1702,9 @@
 /obj/floor_decal/corner/blue{
 	dir = 5
 	},
+/obj/random/clipboard,
+/obj/item/material/folder/blue,
+/obj/item/material/ashtray/glass,
 /turf/simulated/floor/tiled/dark/monotile,
 /area/bridge/meeting_room)
 "cZ" = (
@@ -2086,9 +2094,7 @@
 /turf/simulated/floor/tiled/dark,
 /area/crew_quarters/heads/office/xo)
 "dK" = (
-/obj/structure/table/woodentable/walnut,
-/obj/random/clipboard,
-/obj/item/material/folder/blue,
+/obj/machinery/map_table,
 /turf/simulated/floor/carpet/blue2,
 /area/bridge/meeting_room)
 "dL" = (
@@ -2131,14 +2137,6 @@
 /obj/floor_decal/corner/red/half,
 /turf/simulated/floor/tiled/monotile,
 /area/hallway/primary/bridge/fore)
-"dP" = (
-/obj/structure/table/woodentable/walnut,
-/obj/random_multi/single_item/memo_scgr,
-/obj/random_multi/single_item/memo_command,
-/obj/random_multi/single_item/memo_corporate,
-/obj/random_multi/single_item/punitelli,
-/turf/simulated/floor/carpet/blue2,
-/area/bridge/meeting_room)
 "dQ" = (
 /obj/floor_decal/corner/blue{
 	dir = 6
@@ -2170,6 +2168,9 @@
 	departmentType = 5;
 	name = "Bridge Conference Room";
 	pixel_x = 32
+	},
+/obj/structure/bed/chair/comfy/blue{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/dark,
 /area/bridge/meeting_room)
@@ -9766,12 +9767,6 @@
 	},
 /turf/space,
 /area/space)
-"zf" = (
-/obj/structure/bed/chair/comfy/blue{
-	dir = 4
-	},
-/turf/simulated/floor/carpet/blue2,
-/area/bridge/meeting_room)
 "zg" = (
 /obj/structure/cable/green{
 	d1 = 1;
@@ -12796,12 +12791,6 @@
 /obj/structure/catwalk,
 /turf/simulated/open,
 /area/maintenance/bridge/aftport)
-"LN" = (
-/obj/structure/table/woodentable/walnut,
-/obj/item/material/ashtray/glass,
-/obj/item/tableflag/rainbow/pride,
-/turf/simulated/floor/carpet/blue2,
-/area/bridge/meeting_room)
 "LP" = (
 /obj/structure/cable/green{
 	d1 = 2;
@@ -14334,6 +14323,9 @@
 /obj/machinery/rotating_alarm/security_alarm{
 	dir = 8
 	},
+/obj/structure/bed/chair/comfy/blue{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/dark,
 /area/bridge/meeting_room)
 "So" = (
@@ -14518,9 +14510,6 @@
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/maintenance/auxsolarbridge)
-"Te" = (
-/turf/simulated/floor/carpet/blue2,
-/area/bridge/meeting_room)
 "Tf" = (
 /obj/structure/table/woodentable_reinforced/walnut/maple,
 /obj/floor_decal/corner/blue/mono,
@@ -15179,6 +15168,9 @@
 /obj/floor_decal/corner/blue{
 	dir = 9
 	},
+/obj/structure/bed/chair/comfy/blue{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/dark,
 /area/bridge/meeting_room)
 "Wg" = (
@@ -15313,12 +15305,6 @@
 /area/crew_quarters/safe_room/bridge)
 "Xe" = (
 /obj/structure/bed/chair/comfy/blue,
-/turf/simulated/floor/carpet/blue2,
-/area/bridge/meeting_room)
-"Xg" = (
-/obj/structure/bed/chair/comfy/blue{
-	dir = 8
-	},
 /turf/simulated/floor/carpet/blue2,
 /area/bridge/meeting_room)
 "Xh" = (
@@ -15777,6 +15763,9 @@
 	},
 /obj/floor_decal/corner/blue{
 	dir = 9
+	},
+/obj/structure/bed/chair/comfy/blue{
+	dir = 4
 	},
 /turf/simulated/floor/tiled/dark,
 /area/bridge/meeting_room)
@@ -26341,11 +26330,11 @@ Hs
 hs
 cW
 dg
-Te
-zf
-zf
-zf
-Te
+Xe
+dK
+dK
+dK
+Ah
 el
 eK
 hs
@@ -26545,8 +26534,8 @@ cX
 dl
 Xe
 dK
-dP
-LN
+dK
+dK
 Ah
 eo
 eL
@@ -26745,11 +26734,11 @@ ra
 jO
 cY
 do
-Te
-Xg
-Xg
-Xg
-Te
+Xe
+dK
+dK
+dK
+Ah
 ep
 eO
 bX

@@ -23,6 +23,8 @@
 	var/base_sensor_visibility = 10
 
 	var/list/navigation_viewers // list of weakrefs to people viewing the overmap via this ship
+	/// LAZYLIST of `/datum/map_table_group`s projecting this ship's sensor picture
+	var/list/map_table_groups
 
 	var/list/engines = list()
 	var/engines_state = 0 //global on/off toggle for all engines
@@ -180,9 +182,15 @@
 		ship_computer.sync_linked()
 	for(var/obj/machinery/payload_interface/payload_interface as anything in MACHINES_OF(/obj/machinery/payload_interface))
 		payload_interface.sync_linked()
+	sync_map_table_groups()
 	for(var/datum/ship_engine/ship_engine in ship_engines)
 		if(check_ownership(ship_engine.holder))
 			engines |= ship_engine
+
+/// Pushes the latest sensor picture to any map tables showing this ship.
+/obj/overmap/visitable/ship/proc/update_map_tables()
+	for (var/datum/map_table_group/group as anything in map_table_groups)
+		group.refresh()
 
 /obj/overmap/visitable/ship/proc/get_landed_info()
 	return "This ship cannot land."

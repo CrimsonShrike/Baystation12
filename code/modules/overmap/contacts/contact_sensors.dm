@@ -87,15 +87,22 @@
 	for (var/datum/nano_module/program/ship/sensors/sensors in linked_programs)
 		sensors.alert_contact_lost(contact_name)
 
+/// The sensor range currently being swept, in overmap tiles. 0 when switched off.
+/obj/machinery/shipsensors/proc/get_sensor_range()
+	if (!use_power)
+		return 0
+	return round(range, 1)
+
 /obj/machinery/shipsensors/Process()
 	..()
 	if (!linked)
 		return
+	process_contacts()
+	linked.update_map_tables()
 
+/obj/machinery/shipsensors/proc/process_contacts()
 	// Update our 'sensor range' (ie. overmap lighting)
-	var/sensor_range = 0
-	if (use_power)
-		sensor_range = round(range, 1)
+	var/sensor_range = get_sensor_range()
 
 	// Update our own marker icon regardless of power or sensor connections.
 	var/datum/overmap_contact/self_record = contact_datums[linked]
@@ -182,8 +189,7 @@
 		// Fade out and remove anything that is out of range.
 		if (QDELETED(contact) || !(contact in objects_in_current_view)) // Object has exited sensor range.
 			if (record)
-				record.marker.alpha = 200
-				animate(record.marker, alpha=0, time=1.3 SECONDS, 1, LINEAR_EASING)
+				record.fade_markers(0, 1.3 SECONDS, 200)
 				QDEL_IN(record, 1.3 SECONDS) // Need to restart the search if you've lost contact with the object.
 				if (contact.scannable)	// Scannable objects are the only ones that give off notifications to prevent spam
 					alert_contact_lost(record.name)
@@ -221,7 +227,7 @@
 					alert_contact_identified(record.name, bearing)
 
 				record.show()
-				animate(record.marker, alpha=255, 2 SECOND, 1, LINEAR_EASING)
+				record.fade_markers(255, 2 SECONDS)
 			continue
 
 		// Update identification information for this record.

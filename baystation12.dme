@@ -2819,6 +2819,8 @@
 #include "code\modules\overmap\projectiles\missiles\presets\sensor_probe.dm"
 #include "code\modules\overmap\ships\beacon.dm"
 #include "code\modules\overmap\ships\landable.dm"
+#include "code\modules\overmap\ships\map_table.dm"
+#include "code\modules\overmap\ships\map_table_spike.dm"
 #include "code\modules\overmap\ships\sensors.dm"
 #include "code\modules\overmap\ships\ship.dm"
 #include "code\modules\overmap\ships\computers\helm.dm"

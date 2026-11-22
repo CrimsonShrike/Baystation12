@@ -15,6 +15,12 @@ GLOBAL_LIST_EMPTY(map_stars)
 	icon = 'icons/turf/space.dmi'
 	icon_state = "map"
 	permit_ao = FALSE
+	// For in-world displays of the overmap (see `/obj/machinery/map_table`): inheriting the display's
+	// plane is what puts this turf inside its KEEP_TOGETHER group, so it is scaled and clipped along
+	// with it rather than drawn loose on the default plane. Keeps its own layer, to stay under the
+	// overmap objects standing on it. Inheriting the id makes a click on the display hit the display.
+	// None of this applies on the overmap itself, where the turf isn't in anything's vis_contents.
+	vis_flags = VIS_INHERIT_PLANE | VIS_INHERIT_ID
 
 /turf/unsimulated/map/edge
 	opacity = 1

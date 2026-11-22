@@ -4,6 +4,10 @@
 	icon = 'icons/obj/overmap.dmi'
 	icon_state = "object"
 	color = "#fffffe"
+	// As for `/turf/unsimulated/map`, for in-world displays of the overmap. Takes the display's layer
+	// as well, so objects sit above the map turfs however they are layered on the overmap itself:
+	// known sectors drop to the map turfs' own layer there, which would otherwise tie with them here.
+	vis_flags = VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_INHERIT_ID
 
 	var/scannable					// If set to TRUE will show up on ship sensors for detailed scans, and will ping when detected by scanners.
 
